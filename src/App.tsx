@@ -1,28 +1,60 @@
-/* Main App Component - Handles routing (using react-router-dom), query client and other providers - use this file to add all routes */
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import Index from './pages/Index'
-import NotFound from './pages/NotFound'
-import Layout from './components/Layout'
+import { AuthProvider } from '@/hooks/use-auth'
+import { I18nProvider } from '@/hooks/use-i18n'
 
-// ONLY IMPORT AND RENDER WORKING PAGES, NEVER ADD PLACEHOLDER COMPONENTS OR PAGES IN THIS FILE
-// AVOID REMOVING ANY CONTEXT PROVIDERS FROM THIS FILE (e.g. TooltipProvider, Toaster, Sonner)
+import Layout from '@/components/Layout'
+import Index from '@/pages/Index'
+import SignIn from '@/pages/SignIn'
+import SignUp from '@/pages/SignUp'
+import ForgotPassword from '@/pages/ForgotPassword'
+import ResetPassword from '@/pages/ResetPassword'
+import VerifyEmail from '@/pages/VerifyEmail'
+import ConfirmEmailChange from '@/pages/ConfirmEmailChange'
+import Onboarding from '@/pages/Onboarding'
+import RoutePlanner from '@/pages/RoutePlanner'
+import RouteResults from '@/pages/RouteResults'
+import RouteDetails from '@/pages/RouteDetails'
+import Dashboard from '@/pages/Dashboard'
+import Storage from '@/pages/Storage'
+import Backhaul from '@/pages/Backhaul'
+import Copilot from '@/pages/Copilot'
+import Settings from '@/pages/Settings'
+import NotFound from '@/pages/NotFound'
 
 const App = () => (
   <BrowserRouter>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES MUST BE ADDED HERE */}
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </TooltipProvider>
+    <I18nProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/confirm-email-change" element={<ConfirmEmailChange />} />
+              <Route path="/onboarding" element={<Onboarding />} />
+              <Route path="/planner" element={<RoutePlanner />} />
+              <Route path="/results" element={<RouteResults />} />
+              <Route path="/details" element={<RouteDetails />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/storage" element={<Storage />} />
+              <Route path="/backhaul" element={<Backhaul />} />
+              <Route path="/copilot" element={<Copilot />} />
+              <Route path="/settings" element={<Settings />} />
+            </Route>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
+      </AuthProvider>
+    </I18nProvider>
   </BrowserRouter>
 )
 

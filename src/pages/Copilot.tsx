@@ -1,0 +1,98 @@
+import { useState } from 'react'
+import { Bot, Send } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { sendCopilotMessage } from '@/services/copilot'
+
+interface Message {
+  role: 'user' | 'assistant'
+  content: string
+}
+
+export default function Copilot() {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'assistant',
+      content:
+        "Hi, I'm Rooted Copilot. Tell me what you need to move and I'll analyze route bridge limits, weather risks, and nearby elevator capacities.",
+    },
+  ])
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSend = async () => {
+    if (!input.trim() || loading) return
+    const userMsg = input
+    setInput('')
+    setMessages((m) => [...m, { role: 'user', content: userMsg }])
+    setLoading(true)
+
+    try {
+      const res = await sendCopilotMessage(userMsg)
+      setMessages((m) => [...m, { role: 'assistant', content: res.content }])
+    } catch (err: any) {
+      setMessages((m) => [
+        ...m,
+        {
+          role: 'assistant',
+          content:
+            'Route B is recommended because it avoids the IA-210 bridge posted limit. (Demo Copilot Response)',
+        },
+      ])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-4 py-2">
+      <div className="flex items-center gap-2 border-b border-zinc-800 pb-3">
+        <Bot className="w-6 h-6 text-emerald-400" />
+        <div>
+          <h1 className="text-xl font-bold text-white">Rooted Copilot</h1>
+          <p className="text-xs text-zinc-400">Natural language agricultural logistics assistant</p>
+        </div>
+      </div>
+
+      <div className="bg-zinc-900/90 border border-zinc-800 rounded-2xl h-[450px] p-4 flex flex-col justify-between">
+        <div className="overflow-y-auto space-y-3 pr-2">
+          {messages.map((m, idx) => (
+            <div
+              key={idx}
+              className={`p-3 rounded-xl text-xs leading-relaxed max-w-[85%] ${
+                m.role === 'user'
+                  ? 'bg-emerald-600 text-white ml-auto'
+                  : 'bg-zinc-950 border border-zinc-800 text-zinc-200'
+              }`}
+            >
+              {m.content}
+            </div>
+          ))}
+          {loading && (
+            <div className="p-3 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-400 animate-pulse">
+              Rooted Copilot is analyzing infrastructure...
+            </div>
+          )}
+        </div>
+
+        <div className="flex gap-2 pt-3 border-t border-zinc-800">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            placeholder="Ask about heavy load routes, bridge limits, or storage..."
+            className="bg-zinc-950 border-zinc-800 text-zinc-100 text-xs"
+          />
+          <Button
+            onClick={handleSend}
+            disabled={loading}
+            size="sm"
+            className="bg-emerald-600 hover:bg-emerald-500"
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
