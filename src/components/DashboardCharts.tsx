@@ -18,43 +18,40 @@ const costData = [
   { week: 'Week 3', cost: 4850 },
   { week: 'Week 4', cost: 4480 },
 ]
-
 const statusData = [
-  { name: 'Active', value: 3, fill: 'hsl(34 100% 44%)' },
-  { name: 'Completed', value: 8, fill: 'hsl(189 100% 38%)' },
-  { name: 'Draft', value: 2, fill: 'hsl(209 100% 32%)' },
+  { name: 'Active', value: 3, fill: 'hsl(142 39% 30%)' },
+  { name: 'Completed', value: 8, fill: 'hsl(200 55% 40%)' },
+  { name: 'Draft', value: 2, fill: 'hsl(40 62% 50%)' },
 ]
-
-const costConfig: ChartConfig = { cost: { label: 'Cost', color: 'hsl(34 100% 44%)' } }
+const costConfig: ChartConfig = { cost: { label: 'Cost', color: 'hsl(142 39% 30%)' } }
 const statusConfig: ChartConfig = { value: { label: 'Shipments' } }
 
 export function DashboardCharts() {
   return (
     <div className="grid md:grid-cols-2 gap-4">
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-zinc-200 mb-4">Weekly Transportation Costs</h3>
+      <div className="bg-card border border-border rounded-xl p-5 shadow-subtle">
+        <h3 className="text-sm font-semibold mb-4">Weekly Transportation Costs</h3>
         <ChartContainer config={costConfig} className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={costData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
-              <XAxis dataKey="week" stroke="#71717a" fontSize={11} />
-              <YAxis stroke="#71717a" fontSize={11} />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(120 12% 88%)" />
+              <XAxis dataKey="week" stroke="hsl(138 7% 35%)" fontSize={11} />
+              <YAxis stroke="hsl(138 7% 35%)" fontSize={11} />
               <Tooltip
                 contentStyle={{
-                  background: '#18181b',
-                  border: '1px solid #3f3f46',
+                  background: 'hsl(0 0% 100%)',
+                  border: '1px solid hsl(120 12% 88%)',
                   borderRadius: '8px',
-                  color: '#e4e4e7',
+                  color: 'hsl(141 19% 11%)',
                 }}
               />
-              <Bar dataKey="cost" fill="hsl(34 100% 44%)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="cost" fill="hsl(142 39% 30%)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </ChartContainer>
       </div>
-
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-zinc-200 mb-4">Shipment Status Distribution</h3>
+      <div className="bg-card border border-border rounded-xl p-5 shadow-subtle">
+        <h3 className="text-sm font-semibold mb-4">Shipment Status Distribution</h3>
         <ChartContainer config={statusConfig} className="h-[200px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -73,10 +70,10 @@ export function DashboardCharts() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  background: '#18181b',
-                  border: '1px solid #3f3f46',
+                  background: 'hsl(0 0% 100%)',
+                  border: '1px solid hsl(120 12% 88%)',
                   borderRadius: '8px',
-                  color: '#e4e4e7',
+                  color: 'hsl(141 19% 11%)',
                 }}
               />
             </PieChart>
@@ -86,7 +83,7 @@ export function DashboardCharts() {
           {statusData.map((s, i) => (
             <div key={i} className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: s.fill }} />
-              <span className="text-zinc-400">
+              <span className="text-muted-foreground">
                 {s.name}: {s.value}
               </span>
             </div>

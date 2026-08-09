@@ -8,16 +8,13 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-zinc-950">
-        <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" />
-        <p className="text-xs text-zinc-500">Loading...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-background">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+        <p className="text-xs text-muted-foreground">Loading...</p>
       </div>
     )
   }
-
-  if (!isAuthenticated) {
+  if (!isAuthenticated)
     return <Navigate to="/signin" state={{ redirect: location.pathname }} replace />
-  }
-
   return <>{children}</>
 }

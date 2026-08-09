@@ -28,7 +28,7 @@ export default function ConfirmEmailChange() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
-      <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-zinc-100">
+      <Card className="w-full max-w-md shadow-elevation">
         <CardHeader>
           <CardTitle className="text-xl">{t.auth.confirmEmailTitle}</CardTitle>
         </CardHeader>
@@ -40,11 +40,11 @@ export default function ConfirmEmailChange() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                className="mt-1"
                 required
               />
             </div>
-            <Button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-500">
+            <Button type="submit" className="w-full">
               {t.auth.confirmSignOut}
             </Button>
           </form>

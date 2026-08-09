@@ -9,6 +9,7 @@ import { CheckCircle2, XCircle, HelpCircle } from 'lucide-react'
 import { createShipment } from '@/services/shipments'
 import { useI18n } from '@/hooks/use-i18n'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 export default function RouteResults() {
   const { t } = useI18n()
@@ -66,24 +67,20 @@ export default function RouteResults() {
     <div className="space-y-6 py-2">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">{t.routes.resultsTitle}</h1>
-          <p className="text-xs text-zinc-400">{t.routes.resultsSubtitle}</p>
+          <h1 className="text-2xl font-bold">{t.routes.resultsTitle}</h1>
+          <p className="text-xs text-muted-foreground">{t.routes.resultsSubtitle}</p>
         </div>
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setSimulationOpen(true)}
-            className="border-zinc-800 text-xs gap-1.5"
+            className="text-xs gap-1.5"
           >
-            <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
+            <HelpCircle className="w-3.5 h-3.5 text-amber-600" />
             <span>{t.routes.simulation}</span>
           </Button>
-          <Button
-            size="sm"
-            onClick={handleSaveShipment}
-            className="bg-emerald-600 hover:bg-emerald-500 text-xs"
-          >
+          <Button size="sm" onClick={handleSaveShipment} className="text-xs">
             {t.routes.saveShipment}
           </Button>
         </div>
@@ -96,33 +93,38 @@ export default function RouteResults() {
           <div
             key={idx}
             onClick={() => setSelectedRoute(idx)}
-            className={`p-4 rounded-xl border cursor-pointer transition-all ${selectedRoute === idx ? 'bg-zinc-900 border-emerald-500 shadow-lg ring-1 ring-emerald-500/50' : 'bg-zinc-950 border-zinc-800 hover:border-zinc-700'}`}
+            className={cn(
+              'p-4 rounded-xl border cursor-pointer transition-all',
+              selectedRoute === idx
+                ? 'bg-card border-primary shadow-elevation ring-1 ring-primary/30'
+                : 'bg-card border-border hover:border-primary/30',
+            )}
           >
             <div className="flex items-center justify-between mb-2">
               <Badge
                 variant="outline"
-                className="uppercase text-[10px] border-emerald-800 text-emerald-400"
+                className="uppercase text-[10px] border-primary/30 text-primary"
               >
                 {r.mode}
               </Badge>
               <RiskBadge level={r.risk_level} />
             </div>
-            <h3 className="font-semibold text-zinc-100 text-sm mb-1">{r.name}</h3>
-            <div className="flex items-baseline gap-3 text-lg font-bold text-white mb-2">
+            <h3 className="font-semibold text-sm mb-1">{r.name}</h3>
+            <div className="flex items-baseline gap-3 text-lg font-bold mb-2">
               <span>${r.estimated_cost_usd}</span>
-              <span className="text-xs font-normal text-zinc-400">
+              <span className="text-xs font-normal text-muted-foreground">
                 {r.distance_miles} mi • {r.estimated_time_minutes} min
               </span>
             </div>
-            <div className="space-y-1 text-[11px] pt-2 border-t border-zinc-800">
+            <div className="space-y-1 text-[11px] pt-2 border-t border-border">
               {r.compatibility_status?.map((c: any, i: number) => (
-                <div key={i} className="flex items-center gap-1.5 text-zinc-300">
+                <div key={i} className="flex items-center gap-1.5">
                   {c.pass ? (
-                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                    <CheckCircle2 className="w-3 h-3 text-primary" />
                   ) : (
-                    <XCircle className="w-3 h-3 text-rose-400" />
+                    <XCircle className="w-3 h-3 text-destructive" />
                   )}
-                  <span>{c.label}</span>
+                  <span className="text-muted-foreground">{c.label}</span>
                 </div>
               ))}
             </div>
@@ -130,11 +132,13 @@ export default function RouteResults() {
         ))}
       </div>
 
-      <div className="bg-emerald-950/30 border border-emerald-800/40 rounded-xl p-5 space-y-2">
-        <h3 className="font-semibold text-emerald-300 text-sm">
+      <div className="bg-primary/5 border border-primary/15 rounded-xl p-5 space-y-2">
+        <h3 className="font-semibold text-primary text-sm">
           {t.routes.whyRecommends} {current.name}
         </h3>
-        <p className="text-xs text-zinc-300 leading-relaxed">{current.recommendation_reason}</p>
+        <p className="text-xs text-foreground/80 leading-relaxed">
+          {current.recommendation_reason}
+        </p>
       </div>
 
       <WhatIfSimulation open={simulationOpen} onOpenChange={setSimulationOpen} />

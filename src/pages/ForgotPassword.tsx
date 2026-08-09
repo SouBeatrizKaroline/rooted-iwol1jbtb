@@ -24,12 +24,10 @@ export default function ForgotPassword() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
-      <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-zinc-100">
+      <Card className="w-full max-w-md shadow-elevation">
         <CardHeader className="text-center">
           <CardTitle className="text-xl">{t.auth.resetPasswordTitle}</CardTitle>
-          <CardDescription className="text-xs text-zinc-400">
-            {t.auth.resetPasswordDesc}
-          </CardDescription>
+          <CardDescription className="text-xs">{t.auth.resetPasswordDesc}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleReset} className="space-y-4">
@@ -39,19 +37,15 @@ export default function ForgotPassword() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                className="mt-1"
                 required
               />
             </div>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-emerald-600 hover:bg-emerald-500"
-            >
+            <Button type="submit" disabled={loading} className="w-full">
               {loading ? t.auth.sending : t.auth.sendResetLink}
             </Button>
             <div className="text-center text-xs pt-2">
-              <Link to="/signin" className="text-emerald-400 hover:underline">
+              <Link to="/signin" className="text-primary hover:underline">
                 {t.auth.backToSignIn}
               </Link>
             </div>

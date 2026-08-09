@@ -27,7 +27,6 @@ export function FloatingAssistant() {
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages])
-
   useEffect(() => {
     if (!open) return
     const handleEsc = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
@@ -78,8 +77,8 @@ export function FloatingAssistant() {
       <button
         onClick={() => setOpen(true)}
         className={cn(
-          'fixed z-40 w-12 h-12 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white',
-          'flex items-center justify-center shadow-lg transition-all hover:scale-105',
+          'fixed z-40 w-12 h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground',
+          'flex items-center justify-center shadow-elevation transition-all hover:scale-105',
           'bottom-20 right-20 md:bottom-4 md:right-20',
           open && 'hidden',
         )}
@@ -87,26 +86,25 @@ export function FloatingAssistant() {
       >
         <Bot className="w-5 h-5" />
       </button>
-
       {open && (
         <div className="fixed inset-0 z-50 flex items-end md:items-stretch md:justify-end">
           <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/30 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
           <div
-            className="relative z-10 bg-zinc-900 border border-zinc-800 rounded-t-2xl md:rounded-l-2xl w-full md:w-[380px] h-[70vh] md:h-full flex flex-col animate-slide-up"
+            className="relative z-10 bg-card border border-border rounded-t-2xl md:rounded-l-2xl w-full md:w-[380px] h-[70vh] md:h-full flex flex-col animate-slide-up"
             role="dialog"
             aria-label={t.copilot.title}
           >
-            <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+            <div className="flex items-center justify-between p-4 border-b border-border">
               <div className="flex items-center gap-2">
-                <div className="bg-emerald-600 p-1.5 rounded-lg text-zinc-950">
+                <div className="bg-primary p-1.5 rounded-lg text-primary-foreground">
                   <Bot className="w-4 h-4" />
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-white">{t.copilot.title}</h2>
-                  <p className="text-[10px] text-zinc-400">{t.copilot.subtitle}</p>
+                  <h2 className="text-sm font-bold">{t.copilot.title}</h2>
+                  <p className="text-[10px] text-muted-foreground">{t.copilot.subtitle}</p>
                 </div>
               </div>
               <Button
@@ -119,7 +117,6 @@ export function FloatingAssistant() {
                 <X className="w-4 h-4" />
               </Button>
             </div>
-
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3">
               {messages.map((m, i) => (
                 <div
@@ -127,8 +124,8 @@ export function FloatingAssistant() {
                   className={cn(
                     'p-2.5 rounded-xl text-xs max-w-[85%]',
                     m.role === 'user'
-                      ? 'bg-emerald-600 text-white ml-auto'
-                      : 'bg-zinc-950 border border-zinc-800 text-zinc-200',
+                      ? 'bg-primary text-primary-foreground ml-auto'
+                      : 'bg-secondary border border-border text-foreground',
                   )}
                 >
                   {m.content || (loading && i === messages.length - 1 ? t.copilot.analyzing : '')}
@@ -140,7 +137,7 @@ export function FloatingAssistant() {
                     <button
                       key={i}
                       onClick={() => handleSend(s)}
-                      className="text-[10px] px-2.5 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-300 hover:border-emerald-700 transition-colors"
+                      className="text-[10px] px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-muted-foreground hover:border-primary/30 transition-colors"
                     >
                       {s}
                     </button>
@@ -148,14 +145,13 @@ export function FloatingAssistant() {
                 </div>
               )}
             </div>
-
-            <div className="p-3 border-t border-zinc-800 flex gap-2">
+            <div className="p-3 border-t border-border flex gap-2">
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder={t.copilot.placeholder}
-                className="bg-zinc-950 border-zinc-800 text-zinc-100 text-xs h-9"
+                className="text-xs h-9"
                 disabled={loading}
                 aria-label={t.copilot.placeholder}
               />
@@ -163,8 +159,7 @@ export function FloatingAssistant() {
                 onClick={() => handleSend()}
                 disabled={loading}
                 size="sm"
-                className="bg-emerald-600 hover:bg-emerald-500 h-9 w-9 p-0"
-                aria-label={t.copilot.send}
+                className="h-9 w-9 p-0"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

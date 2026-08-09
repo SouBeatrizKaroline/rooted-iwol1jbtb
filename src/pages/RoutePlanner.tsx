@@ -8,6 +8,7 @@ import { optimizeRoute } from '@/services/routes'
 import { VehicleForm } from '@/components/VehicleForm'
 import { useI18n } from '@/hooks/use-i18n'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 export default function RoutePlanner() {
   const { t } = useI18n()
@@ -54,66 +55,60 @@ export default function RoutePlanner() {
   return (
     <div className="max-w-2xl mx-auto space-y-6 py-4">
       <div className="text-center space-y-2">
-        <h1 className="text-2xl md:text-3xl font-bold text-white">{t.routes.planTitle}</h1>
-        <p className="text-xs text-zinc-400">
+        <h1 className="text-2xl md:text-3xl font-bold">{t.routes.planTitle}</h1>
+        <p className="text-xs text-muted-foreground">
           {t.routes.step} {step} {t.routes.of} 5
         </p>
       </div>
-
-      <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+      <div className="w-full bg-secondary h-1.5 rounded-full overflow-hidden">
         <div
-          className="bg-emerald-500 h-full transition-all duration-300"
+          className="bg-primary h-full transition-all duration-300"
           style={{ width: `${(step / 5) * 100}%` }}
         />
       </div>
-
-      <div className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-6 space-y-6">
+      <div className="bg-card border border-border rounded-2xl p-6 space-y-6 shadow-subtle">
         {step === 1 && (
           <div className="space-y-4">
-            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
-              {t.routes.step1Title}
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <h2 className="text-base md:text-lg font-semibold">{t.routes.step1Title}</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {commodities.map((c) => (
                 <button
                   key={c.name}
                   onClick={() => setCommodity(c.name)}
-                  className={`p-4 rounded-xl border flex flex-col items-center gap-2 text-sm font-semibold transition-all ${commodity === c.name ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300' : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'}`}
+                  className={cn(
+                    'p-4 rounded-xl border flex flex-col items-center gap-2 text-sm font-semibold transition-all',
+                    commodity === c.name
+                      ? 'bg-primary/5 border-primary text-primary'
+                      : 'bg-secondary border-border text-muted-foreground hover:border-primary/30',
+                  )}
                 >
                   <span className="text-3xl">{c.icon}</span>
                   <span>{c.name}</span>
                 </button>
               ))}
             </div>
-            <Button
-              onClick={() => setStep(2)}
-              className="w-full bg-emerald-600 hover:bg-emerald-500"
-            >
+            <Button onClick={() => setStep(2)} className="w-full">
               {t.common.continue}
             </Button>
           </div>
         )}
-
         {step === 2 && (
           <div className="space-y-4">
-            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
-              {t.routes.step2Title}
-            </h2>
+            <h2 className="text-base md:text-lg font-semibold">{t.routes.step2Title}</h2>
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">{t.routes.cargoWeight}</Label>
+              <Label className="text-xs text-muted-foreground">{t.routes.cargoWeight}</Label>
               <Input
                 type="number"
                 value={weight}
                 onChange={(e) => setWeight(Number(e.target.value))}
-                className="bg-zinc-950 border-zinc-800 text-zinc-100 text-lg h-12"
+                className="text-lg h-12"
               />
               <div className="space-y-2 pt-2">
-                <Label className="text-xs text-zinc-400">{t.routes.estimatedValue}</Label>
+                <Label className="text-xs text-muted-foreground">{t.routes.estimatedValue}</Label>
                 <Input
                   type="number"
                   value={estimatedValue}
                   onChange={(e) => setEstimatedValue(Number(e.target.value))}
-                  className="bg-zinc-950 border-zinc-800 text-zinc-100"
                 />
               </div>
               <div className="flex gap-2 pt-1">
@@ -123,7 +118,7 @@ export default function RoutePlanner() {
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs border-zinc-800 bg-zinc-950 text-zinc-300"
+                    className="text-xs"
                     onClick={() => setWeight(w)}
                   >
                     {w.toLocaleString()} lbs
@@ -132,124 +127,98 @@ export default function RoutePlanner() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep(1)} className="border-zinc-800">
+              <Button variant="outline" onClick={() => setStep(1)}>
                 {t.common.back}
               </Button>
-              <Button
-                onClick={() => setStep(3)}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-500"
-              >
+              <Button onClick={() => setStep(3)} className="flex-1">
                 {t.common.continue}
               </Button>
             </div>
           </div>
         )}
-
         {step === 3 && (
           <div className="space-y-4">
-            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
-              {t.routes.step3Title}
-            </h2>
+            <h2 className="text-base md:text-lg font-semibold">{t.routes.step3Title}</h2>
             <div className="space-y-3">
               <div>
-                <Label className="text-xs text-zinc-400">{t.routes.pickupLocation}</Label>
+                <Label className="text-xs text-muted-foreground">{t.routes.pickupLocation}</Label>
                 <Input
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
-                  className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                  className="mt-1"
                 />
               </div>
               <div>
-                <Label className="text-xs text-zinc-400">{t.routes.deliveryDestination}</Label>
+                <Label className="text-xs text-muted-foreground">
+                  {t.routes.deliveryDestination}
+                </Label>
                 <Input
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                  className="mt-1"
                 />
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep(2)} className="border-zinc-800">
+              <Button variant="outline" onClick={() => setStep(2)}>
                 {t.common.back}
               </Button>
-              <Button
-                onClick={() => setStep(4)}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-500"
-              >
+              <Button onClick={() => setStep(4)} className="flex-1">
                 {t.common.continue}
               </Button>
             </div>
           </div>
         )}
-
         {step === 4 && (
           <div className="space-y-4">
-            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
-              {t.routes.step4Title}
-            </h2>
+            <h2 className="text-base md:text-lg font-semibold">{t.routes.step4Title}</h2>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-xs text-zinc-400">{t.routes.pickupWindow}</Label>
-                <Input
-                  type="date"
-                  defaultValue="2026-08-10"
-                  className="bg-zinc-950 border-zinc-800 text-zinc-100"
-                />
+                <Label className="text-xs text-muted-foreground">{t.routes.pickupWindow}</Label>
+                <Input type="date" defaultValue="2026-08-10" className="mt-1" />
               </div>
               <div>
-                <Label className="text-xs text-zinc-400">{t.routes.deliveryDeadline}</Label>
-                <Input
-                  type="date"
-                  defaultValue="2026-08-11"
-                  className="bg-zinc-950 border-zinc-800 text-zinc-100"
-                />
+                <Label className="text-xs text-muted-foreground">{t.routes.deliveryDeadline}</Label>
+                <Input type="date" defaultValue="2026-08-11" className="mt-1" />
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={() => setStep(3)} className="border-zinc-800">
+              <Button variant="outline" onClick={() => setStep(3)}>
                 {t.common.back}
               </Button>
-              <Button
-                onClick={() => setStep(5)}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-500"
-              >
+              <Button onClick={() => setStep(5)} className="flex-1">
                 {t.common.continue}
               </Button>
             </div>
           </div>
         )}
-
         {step === 5 && (
           <div className="space-y-4">
-            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
-              {t.routes.step5Title}
-            </h2>
-            <div className="p-4 bg-zinc-950 border border-emerald-800/40 rounded-xl space-y-2">
+            <h2 className="text-base md:text-lg font-semibold">{t.routes.step5Title}</h2>
+            <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-zinc-200">
-                  5-Axle Standard Grain Hopper (3S2)
-                </span>
-                <span className="text-xs text-emerald-400 font-medium">{t.vehicles.default}</span>
+                <span className="font-semibold">5-Axle Standard Grain Hopper (3S2)</span>
+                <span className="text-xs text-primary font-medium">{t.vehicles.default}</span>
               </div>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-muted-foreground">
                 {t.vehicles.grossWeightRating}: 80,000 lbs | {t.vehicles.height}: 13.5 ft
               </p>
               <Button
                 variant="link"
                 onClick={() => setVehicleModal(true)}
-                className="text-xs text-emerald-400 p-0 h-auto"
+                className="text-xs text-primary p-0 h-auto"
               >
                 + {t.vehicles.addVehicle}
               </Button>
             </div>
             <div className="flex gap-2 pt-2">
-              <Button variant="outline" onClick={() => setStep(4)} className="border-zinc-800">
+              <Button variant="outline" onClick={() => setStep(4)}>
                 {t.common.back}
               </Button>
               <Button
                 onClick={handleFindRoute}
                 disabled={loading}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-500 font-semibold gap-2 text-white h-11"
+                className="flex-1 font-semibold gap-2 h-11"
               >
                 <span>{loading ? t.routes.evaluating : t.routes.findBestRoute}</span>
                 <ArrowRight className="w-4 h-4" />

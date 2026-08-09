@@ -11,28 +11,26 @@ export function RiskBadge({ level, className }: RiskBadgeProps) {
     low: {
       label: 'Low Risk',
       icon: ShieldCheck,
-      classes: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+      classes: 'bg-primary/10 text-primary border-primary/20',
     },
     moderate: {
       label: 'Moderate Risk',
       icon: AlertTriangle,
-      classes: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+      classes: 'bg-amber-50 text-amber-700 border-amber-200',
     },
     high: {
       label: 'High Risk',
       icon: ShieldAlert,
-      classes: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
+      classes: 'bg-orange-50 text-orange-700 border-orange-200',
     },
     blocked: {
       label: 'Blocked',
       icon: Ban,
-      classes: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
+      classes: 'bg-destructive/10 text-destructive border-destructive/20',
     },
   }
-
   const config = configs[level] || configs.low
   const Icon = config.icon
-
   return (
     <span
       className={cn(

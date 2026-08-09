@@ -38,7 +38,7 @@ export function AccessibilityPanel() {
       try {
         setSettings(JSON.parse(saved))
       } catch {
-        /* intentionally ignored */
+        /* ignored */
       }
     }
   }, [])
@@ -52,9 +52,7 @@ export function AccessibilityPanel() {
     root.setAttribute('data-colorblind', settings.colorBlindMode)
   }, [settings])
 
-  const toggle = (key: keyof typeof settings) => {
-    setSettings((s) => ({ ...s, [key]: !s[key] }))
-  }
+  const toggle = (key: keyof typeof settings) => setSettings((s) => ({ ...s, [key]: !s[key] }))
 
   const colorBlindModes = [
     { id: 'default', label: t.accessibility.colorBlindDefault },
@@ -79,28 +77,26 @@ export function AccessibilityPanel() {
       <button
         onClick={() => setOpen(true)}
         className={cn(
-          'fixed bottom-4 right-4 z-40 w-11 h-11 rounded-full',
-          'bg-zinc-900 border border-zinc-700 text-emerald-400',
-          'flex items-center justify-center shadow-lg hover:bg-zinc-800 transition-colors',
+          'fixed z-40 w-11 h-11 rounded-full border border-border bg-card text-primary',
+          'flex items-center justify-center shadow-subtle hover:bg-secondary transition-colors',
           'bottom-20 right-4 md:bottom-4 md:right-4',
         )}
         aria-label={t.accessibility.title}
       >
         <Accessibility className="w-5 h-5" />
       </button>
-
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         >
           <div
-            className="bg-zinc-900 border border-zinc-800 rounded-t-2xl md:rounded-2xl w-full max-w-md p-5 space-y-4 max-h-[80vh] overflow-y-auto"
+            className="bg-card border border-border rounded-t-2xl md:rounded-2xl w-full max-w-md p-5 space-y-4 max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-bold text-zinc-100 flex items-center gap-2">
-                <Accessibility className="w-5 h-5 text-emerald-400" />
+              <h2 className="text-base font-bold flex items-center gap-2">
+                <Accessibility className="w-5 h-5 text-primary" />
                 {t.accessibility.title}
               </h2>
               <Button
@@ -112,12 +108,11 @@ export function AccessibilityPanel() {
                 <X className="w-4 h-4" />
               </Button>
             </div>
-
             <div className="space-y-3">
               {toggles.map((item) => (
                 <div key={item.key} className="flex items-center justify-between">
-                  <Label className="text-xs text-zinc-300 flex items-center gap-2">
-                    <item.icon className="w-4 h-4 text-zinc-400" />
+                  <Label className="text-xs flex items-center gap-2">
+                    <item.icon className="w-4 h-4 text-muted-foreground" />
                     {item.label}
                   </Label>
                   <Switch
@@ -127,10 +122,9 @@ export function AccessibilityPanel() {
                 </div>
               ))}
             </div>
-
-            <div className="space-y-2 pt-2 border-t border-zinc-800">
-              <Label className="text-xs text-zinc-300 flex items-center gap-2">
-                <Eye className="w-4 h-4 text-zinc-400" />
+            <div className="space-y-2 pt-2 border-t border-border">
+              <Label className="text-xs flex items-center gap-2">
+                <Eye className="w-4 h-4 text-muted-foreground" />
                 {t.accessibility.colorBlindMode}
               </Label>
               <div className="flex flex-wrap gap-1.5">
@@ -141,8 +135,8 @@ export function AccessibilityPanel() {
                     className={cn(
                       'text-[10px] px-2.5 py-1 rounded-md font-medium transition-colors',
                       settings.colorBlindMode === mode.id
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-zinc-950 text-zinc-400 border border-zinc-800',
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-secondary text-muted-foreground border border-border',
                     )}
                   >
                     {mode.label}
@@ -150,15 +144,14 @@ export function AccessibilityPanel() {
                 ))}
               </div>
             </div>
-
             {language === 'pt-BR' && (
-              <div className="flex items-center justify-between pt-2 border-t border-zinc-800">
-                <Label className="text-xs text-zinc-300">{t.accessibility.vlibras}</Label>
+              <div className="flex items-center justify-between pt-2 border-t border-border">
+                <Label className="text-xs">{t.accessibility.vlibras}</Label>
                 <Switch checked={settings.vlibras} onCheckedChange={() => toggle('vlibras')} />
               </div>
             )}
-            <div className="flex items-center justify-between pt-2 border-t border-zinc-800">
-              <Label className="text-xs text-zinc-300">
+            <div className="flex items-center justify-between pt-2 border-t border-border">
+              <Label className="text-xs">
                 {t.accessibility?.signLanguage ?? 'Sign Language Support'}
               </Label>
               <Switch
@@ -166,7 +159,6 @@ export function AccessibilityPanel() {
                 onCheckedChange={() => toggle('signLanguage')}
               />
             </div>
-
             <Button
               variant="outline"
               size="sm"
@@ -184,7 +176,7 @@ export function AccessibilityPanel() {
                   signLanguage: false,
                 })
               }
-              className="w-full border-zinc-700 text-zinc-300 text-xs mt-2"
+              className="w-full text-xs mt-2"
             >
               Reset Accessibility Settings
             </Button>

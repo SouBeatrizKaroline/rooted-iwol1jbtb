@@ -25,10 +25,10 @@ export default function VerifyEmail() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
-      <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-zinc-100 text-center">
+      <Card className="w-full max-w-md text-center shadow-elevation">
         <CardHeader>
           <CardTitle className="text-xl">{t.auth.verifyEmailTitle}</CardTitle>
-          <CardDescription className="text-zinc-300 text-sm mt-2">{status}</CardDescription>
+          <CardDescription className="text-sm mt-2">{status}</CardDescription>
         </CardHeader>
       </Card>
     </div>

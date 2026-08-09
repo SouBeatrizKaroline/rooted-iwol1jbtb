@@ -20,7 +20,6 @@ export default function Storage() {
       .catch(() => setError(true))
       .finally(() => setLoading(false))
   }
-
   useEffect(() => {
     loadData()
   }, [])
@@ -28,8 +27,8 @@ export default function Storage() {
   return (
     <div className="space-y-6 py-2">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold text-white">{t.storage.title}</h1>
-        <p className="text-xs text-zinc-400">{t.storage.subtitle}</p>
+        <h1 className="text-2xl font-bold">{t.storage.title}</h1>
+        <p className="text-xs text-muted-foreground">{t.storage.subtitle}</p>
       </div>
       {loading ? (
         <LoadingState label="Loading storage facilities..." />
@@ -40,37 +39,43 @@ export default function Storage() {
       ) : (
         <div className="grid md:grid-cols-3 gap-4">
           {facilities.map((f) => (
-            <div key={f.id} className="bg-zinc-900 border border-zinc-800 p-5 rounded-xl space-y-3">
+            <div
+              key={f.id}
+              className="bg-card border border-border p-5 rounded-xl space-y-3 shadow-subtle"
+            >
               <div className="flex items-start justify-between">
-                <Warehouse className="w-6 h-6 text-emerald-400" />
-                <Badge
-                  variant="outline"
-                  className="text-[10px] uppercase border-emerald-800 text-emerald-400"
-                >
+                <Warehouse className="w-6 h-6 text-primary" />
+                <Badge variant="outline" className="text-[10px] uppercase">
                   {f.facility_type}
                 </Badge>
               </div>
               <div>
-                <h3 className="font-semibold text-zinc-100 text-sm">{f.name}</h3>
-                <p className="text-xs text-zinc-400">
+                <h3 className="font-semibold text-sm">{f.name}</h3>
+                <p className="text-xs text-muted-foreground">
                   {f.distance_miles} {t.storage.distance} • {t.storage.fee}: ${f.fee_per_bushel}
                   {t.storage.perBushelDay}
                 </p>
               </div>
               <div className="space-y-1">
-                <div className="flex justify-between text-xs text-zinc-300">
-                  <span>{t.storage.capacity}</span>
-                  <span className="font-bold text-amber-400">{f.capacity_pct}%</span>
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">{t.storage.capacity}</span>
+                  <span
+                    className={
+                      f.capacity_pct > 85 ? 'font-bold text-amber-600' : 'font-bold text-primary'
+                    }
+                  >
+                    {f.capacity_pct}%
+                  </span>
                 </div>
-                <div className="w-full bg-zinc-950 h-2 rounded-full overflow-hidden border border-zinc-800">
+                <div className="w-full bg-secondary h-2 rounded-full overflow-hidden border border-border">
                   <div
-                    className={`h-full ${f.capacity_pct > 85 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                    className={f.capacity_pct > 85 ? 'h-full bg-amber-500' : 'h-full bg-primary'}
                     style={{ width: `${f.capacity_pct}%` }}
                   />
                 </div>
               </div>
-              <div className="pt-2 border-t border-zinc-800/80 flex items-center justify-between text-xs">
-                <span className="text-zinc-400">{t.storage.transportRisk}</span>
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">{t.storage.transportRisk}</span>
                 <RiskBadge level={f.transport_risk === 'high' ? 'high' : 'low'} />
               </div>
             </div>

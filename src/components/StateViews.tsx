@@ -5,8 +5,8 @@ export function LoadingState({ label = 'Loading...' }: { label?: string }) {
   return (
     <div className="flex items-center justify-center py-12">
       <div className="text-center space-y-3">
-        <Loader2 className="w-8 h-8 text-emerald-400 animate-spin mx-auto" />
-        <p className="text-sm text-zinc-400">{label}</p>
+        <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
+        <p className="text-sm text-muted-foreground">{label}</p>
       </div>
     </div>
   )
@@ -22,15 +22,10 @@ export function ErrorState({
   return (
     <div className="flex items-center justify-center py-12">
       <div className="text-center space-y-3 max-w-sm">
-        <AlertTriangle className="w-8 h-8 text-amber-400 mx-auto" />
-        <p className="text-sm text-zinc-300">{message}</p>
+        <AlertTriangle className="w-8 h-8 text-amber-600 mx-auto" />
+        <p className="text-sm text-foreground">{message}</p>
         {onRetry && (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={onRetry}
-            className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
-          >
+          <Button size="sm" variant="outline" onClick={onRetry}>
             Try Again
           </Button>
         )}
@@ -43,8 +38,8 @@ export function EmptyState({ message = 'No data available' }: { message?: string
   return (
     <div className="flex items-center justify-center py-12">
       <div className="text-center space-y-2">
-        <Inbox className="w-8 h-8 text-zinc-600 mx-auto" />
-        <p className="text-sm text-zinc-400">{message}</p>
+        <Inbox className="w-8 h-8 text-muted-foreground/50 mx-auto" />
+        <p className="text-sm text-muted-foreground">{message}</p>
       </div>
     </div>
   )

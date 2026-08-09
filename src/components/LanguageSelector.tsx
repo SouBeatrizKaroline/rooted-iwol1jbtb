@@ -20,55 +20,47 @@ export function LanguageSelector() {
     <div className="flex items-center gap-1">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 gap-1.5 text-xs text-emerald-100/80 hover:text-white"
-          >
+          <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-xs">
             <span className="text-base leading-none">{config.flag}</span>
             <span className="hidden sm:inline">{config.label}</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          className="bg-zinc-900 border-zinc-800 text-zinc-100 max-h-[400px] overflow-y-auto w-48"
-        >
-          <DropdownMenuLabel className="text-[10px] text-zinc-500 uppercase tracking-wide">
+        <DropdownMenuContent align="end" className="max-h-[400px] overflow-y-auto w-48">
+          <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wide">
             Complete
           </DropdownMenuLabel>
           {PHASE_1_LOCALES.map((code) => (
             <DropdownMenuItem
               key={code}
               onClick={() => setLanguage(code)}
-              className="hover:bg-zinc-800 cursor-pointer gap-2"
+              className="cursor-pointer gap-2"
             >
               <span className="text-base">{LOCALE_CONFIGS[code].flag}</span>
               <span className="flex-1">{LOCALE_CONFIGS[code].label}</span>
-              {language === code && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+              {language === code && <Check className="w-3.5 h-3.5 text-primary" />}
             </DropdownMenuItem>
           ))}
-          <DropdownMenuSeparator className="bg-zinc-800" />
-          <DropdownMenuLabel className="text-[10px] text-zinc-500 uppercase tracking-wide">
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wide">
             Coming Soon
           </DropdownMenuLabel>
           {upcomingLocales.map((code) => (
             <DropdownMenuItem
               key={code}
               onClick={() => setLanguage(code)}
-              className="hover:bg-zinc-800 cursor-pointer gap-2 opacity-50"
+              className="cursor-pointer gap-2 opacity-50"
             >
               <span className="text-base">{LOCALE_CONFIGS[code].flag}</span>
               <span className="flex-1">{LOCALE_CONFIGS[code].label}</span>
-              {language === code && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+              {language === code && <Check className="w-3.5 h-3.5 text-primary" />}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-
       <Button
         variant="outline"
         size="sm"
-        className="h-7 text-[10px] px-2 border-emerald-800/40 bg-emerald-950/20 text-emerald-300"
+        className="h-7 text-[10px] px-2"
         onClick={() => setUnits(units === 'us' ? 'metric' : 'us')}
       >
         {units.toUpperCase()}

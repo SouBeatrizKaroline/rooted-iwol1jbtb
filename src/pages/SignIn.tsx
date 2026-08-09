@@ -31,10 +31,8 @@ export default function SignIn() {
     setLoading(true)
     const { error } = await signIn(email, password)
     setLoading(false)
-
-    if (error) {
-      toast.error(t.auth.invalidCredentials)
-    } else {
+    if (error) toast.error(t.auth.invalidCredentials)
+    else {
       toast.success(t.notifications.welcomeBack)
       navigate(redirect)
     }
@@ -42,35 +40,30 @@ export default function SignIn() {
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center py-8">
-      <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-zinc-100">
+      <Card className="w-full max-w-md shadow-elevation">
         <CardHeader className="space-y-2 text-center">
-          <div className="mx-auto w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-zinc-950 mb-2">
+          <div className="mx-auto w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground mb-2">
             <Wheat className="w-6 h-6 stroke-[2.5]" />
           </div>
           <CardTitle className="text-2xl font-bold">{t.auth.signInTitle}</CardTitle>
-          <CardDescription className="text-zinc-400 text-xs">
-            {t.auth.signInSubtitle}
-          </CardDescription>
+          <CardDescription className="text-xs">{t.auth.signInSubtitle}</CardDescription>
         </CardHeader>
-
         <CardContent>
           <form onSubmit={handleSignIn} className="space-y-4">
             <div className="space-y-1">
-              <Label className="text-xs text-zinc-300">{t.auth.email}</Label>
+              <Label className="text-xs">{t.auth.email}</Label>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="voce@exemplo.com"
-                className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                placeholder="you@example.com"
                 required
               />
             </div>
-
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-zinc-300">{t.auth.password}</Label>
-                <Link to="/forgot-password" className="text-xs text-emerald-400 hover:underline">
+                <Label className="text-xs">{t.auth.password}</Label>
+                <Link to="/forgot-password" className="text-xs text-primary hover:underline">
                   {t.auth.forgotPassword}
                 </Link>
               </div>
@@ -78,30 +71,25 @@ export default function SignIn() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-zinc-950 border-zinc-800 text-zinc-100"
                 required
               />
             </div>
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-emerald-600 hover:bg-emerald-500 font-semibold"
-            >
+            <Button type="submit" disabled={loading} className="w-full font-semibold">
               {loading ? t.auth.signingIn : t.auth.signIn}
             </Button>
           </form>
         </CardContent>
-
-        <CardFooter className="flex flex-col gap-3 border-t border-zinc-800 pt-4 text-xs text-zinc-400">
+        <CardFooter className="flex flex-col gap-3 border-t border-border pt-4 text-xs text-muted-foreground">
           <div className="flex items-center justify-center">
             <span>{t.auth.noAccount} </span>
-            <Link to="/signup" className="text-emerald-400 font-semibold ml-1 hover:underline">
+            <Link to="/signup" className="text-primary font-semibold ml-1 hover:underline">
               {t.auth.createAccount}
             </Link>
           </div>
-          <div className="w-full pt-2 border-t border-zinc-800/50">
-            <p className="text-center text-[10px] text-zinc-500 mb-2">Want to explore first?</p>
+          <div className="w-full pt-2 border-t border-border/50">
+            <p className="text-center text-[10px] text-muted-foreground mb-2">
+              Want to explore first?
+            </p>
             <Button
               onClick={async () => {
                 setLoading(true)
@@ -114,7 +102,7 @@ export default function SignIn() {
                 }
               }}
               variant="outline"
-              className="w-full border-emerald-700/60 text-emerald-300 hover:bg-emerald-950/40 text-xs"
+              className="w-full text-xs"
             >
               Try Demo Mode
             </Button>

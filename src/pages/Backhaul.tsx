@@ -18,7 +18,6 @@ export default function Backhaul() {
       .catch(() => setError(true))
       .finally(() => setLoading(false))
   }
-
   useEffect(() => {
     loadData()
   }, [])
@@ -26,14 +25,14 @@ export default function Backhaul() {
   return (
     <div className="space-y-6 py-2">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold text-white">{t.backhaul.title}</h1>
-        <p className="text-xs text-zinc-400">{t.backhaul.subtitle}</p>
+        <h1 className="text-2xl font-bold">{t.backhaul.title}</h1>
+        <p className="text-xs text-muted-foreground">{t.backhaul.subtitle}</p>
       </div>
-      <div className="bg-emerald-950/30 border border-emerald-800/40 rounded-xl p-4 flex items-center gap-3 text-xs text-emerald-200">
-        <ArrowLeftRight className="w-6 h-6 text-emerald-400 shrink-0" />
+      <div className="bg-primary/5 border border-primary/15 rounded-xl p-4 flex items-center gap-3 text-xs">
+        <ArrowLeftRight className="w-6 h-6 text-primary shrink-0" />
         <div>
-          <p className="font-semibold text-emerald-300">{t.backhaul.emptyMileReduction}</p>
-          <p className="text-emerald-400/80">{t.backhaul.emptyMileDesc}</p>
+          <p className="font-semibold text-primary">{t.backhaul.emptyMileReduction}</p>
+          <p className="text-muted-foreground">{t.backhaul.emptyMileDesc}</p>
         </div>
       </div>
       {loading ? (
@@ -47,20 +46,20 @@ export default function Backhaul() {
           {loads.map((l) => (
             <div
               key={l.id}
-              className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+              className="p-4 bg-card border border-border rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-subtle"
             >
               <div className="space-y-1">
-                <span className="font-bold text-sm text-zinc-100">
+                <span className="font-bold text-sm">
                   {l.commodity} ({l.weight_lb?.toLocaleString()} lbs)
                 </span>
-                <p className="text-zinc-400">
+                <p className="text-muted-foreground">
                   {l.origin_name} → {l.destination_name}
                 </p>
-                <p className="text-[10px] text-amber-400">{t.backhaul.potentialOpportunity}</p>
+                <p className="text-[10px] text-amber-600">{t.backhaul.potentialOpportunity}</p>
               </div>
               <div className="text-right">
-                <p className="text-base font-bold text-emerald-400">${l.rate_usd}</p>
-                <p className="text-[10px] text-zinc-500">{l.pickup_window}</p>
+                <p className="text-base font-bold text-primary">${l.rate_usd}</p>
+                <p className="text-[10px] text-muted-foreground">{l.pickup_window}</p>
               </div>
             </div>
           ))}

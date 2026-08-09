@@ -37,10 +37,8 @@ export default function SignUp() {
     setLoading(true)
     const { error } = await signUp(email, password, role)
     setLoading(false)
-
-    if (error) {
-      toast.error(t.auth.signupFailed + ': ' + (error.message || ''))
-    } else {
+    if (error) toast.error(t.auth.signupFailed + ': ' + (error.message || ''))
+    else {
       toast.success(t.auth.accountCreated)
       navigate('/onboarding')
     }
@@ -48,49 +46,42 @@ export default function SignUp() {
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center py-8">
-      <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-zinc-100">
+      <Card className="w-full max-w-md shadow-elevation">
         <CardHeader className="space-y-2 text-center">
-          <div className="mx-auto w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-zinc-950 mb-2">
+          <div className="mx-auto w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-primary-foreground mb-2">
             <Wheat className="w-6 h-6 stroke-[2.5]" />
           </div>
           <CardTitle className="text-2xl font-bold">{t.auth.signUpTitle}</CardTitle>
-          <CardDescription className="text-zinc-400 text-xs">
-            {t.auth.signUpSubtitle}
-          </CardDescription>
+          <CardDescription className="text-xs">{t.auth.signUpSubtitle}</CardDescription>
         </CardHeader>
-
         <CardContent>
           <form onSubmit={handleSignUp} className="space-y-4">
             <div className="space-y-1">
-              <Label className="text-xs text-zinc-300">{t.auth.email}</Label>
+              <Label className="text-xs">{t.auth.email}</Label>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="frota@coop.com"
-                className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                placeholder="fleet@coop.com"
                 required
               />
             </div>
-
             <div className="space-y-1">
-              <Label className="text-xs text-zinc-300">{t.auth.password}</Label>
+              <Label className="text-xs">{t.auth.password}</Label>
               <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-zinc-950 border-zinc-800 text-zinc-100"
                 required
               />
             </div>
-
             <div className="space-y-1">
-              <Label className="text-xs text-zinc-300">{t.auth.role}</Label>
+              <Label className="text-xs">{t.auth.role}</Label>
               <Select value={role} onValueChange={setRole}>
-                <SelectTrigger className="bg-zinc-950 border-zinc-800 text-zinc-100">
+                <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-900 border-zinc-800 text-zinc-100">
+                <SelectContent>
                   <SelectItem value="producer">{t.onboarding.roles.producer}</SelectItem>
                   <SelectItem value="carrier">{t.onboarding.roles.carrier}</SelectItem>
                   <SelectItem value="cooperative">{t.onboarding.roles.cooperative}</SelectItem>
@@ -103,20 +94,14 @@ export default function SignUp() {
                 </SelectContent>
               </Select>
             </div>
-
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-emerald-600 hover:bg-emerald-500 font-semibold"
-            >
+            <Button type="submit" disabled={loading} className="w-full font-semibold">
               {loading ? t.auth.creatingAccount : t.auth.signUp}
             </Button>
           </form>
         </CardContent>
-
-        <CardFooter className="flex justify-center border-t border-zinc-800 pt-4 text-xs text-zinc-400">
+        <CardFooter className="flex justify-center border-t border-border pt-4 text-xs text-muted-foreground">
           <span>{t.auth.alreadyRegistered} </span>
-          <Link to="/signin" className="text-emerald-400 font-semibold ml-1 hover:underline">
+          <Link to="/signin" className="text-primary font-semibold ml-1 hover:underline">
             {t.auth.signIn}
           </Link>
         </CardFooter>

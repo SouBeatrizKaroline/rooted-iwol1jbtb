@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { useI18n } from '@/hooks/use-i18n'
 import pb from '@/lib/pocketbase/client'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 export default function Onboarding() {
   const { t } = useI18n()
@@ -26,7 +27,6 @@ export default function Onboarding() {
     { id: 'storage_operator', label: t.onboarding.roles.storage_operator },
     { id: 'other', label: t.onboarding.roles.other },
   ]
-
   const goals = [
     t.onboarding.goals.moveLoad,
     t.onboarding.goals.findRoute,
@@ -52,59 +52,65 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center py-8">
-      <Card className="w-full max-w-lg bg-zinc-900 border-zinc-800 text-zinc-100">
+      <Card className="w-full max-w-lg shadow-elevation">
         <CardHeader className="text-center space-y-2">
-          <Wheat className="w-8 h-8 text-emerald-400 mx-auto" />
+          <Wheat className="w-8 h-8 text-primary mx-auto" />
           <CardTitle className="text-2xl font-bold">{t.onboarding.welcome}</CardTitle>
-          <CardDescription className="text-zinc-400 text-xs">
+          <CardDescription className="text-xs">
             {t.onboarding.stepOf} {step} {t.common.of} 2 — {t.onboarding.setupProfile}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {step === 1 ? (
             <div className="space-y-4">
-              <p className="text-sm font-semibold text-zinc-200">{t.onboarding.whoAreYou}</p>
+              <p className="text-sm font-semibold">{t.onboarding.whoAreYou}</p>
               <div className="grid gap-2">
                 {roles.map((r) => (
                   <button
                     key={r.id}
                     onClick={() => setRole(r.id)}
-                    className={`p-3 rounded-lg border text-left text-sm transition-all ${role === r.id ? 'bg-emerald-950/40 border-emerald-500 text-emerald-300' : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-700'}`}
+                    className={cn(
+                      'p-3 rounded-lg border text-left text-sm transition-all',
+                      role === r.id
+                        ? 'bg-primary/5 border-primary text-primary'
+                        : 'bg-secondary border-border text-foreground hover:border-primary/30',
+                    )}
                   >
                     {r.label}
                   </button>
                 ))}
               </div>
-              <Button
-                onClick={() => setStep(2)}
-                disabled={!role}
-                className="w-full bg-emerald-600 hover:bg-emerald-500"
-              >
+              <Button onClick={() => setStep(2)} disabled={!role} className="w-full">
                 {t.common.continue}
               </Button>
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-sm font-semibold text-zinc-200">{t.onboarding.whatAccomplish}</p>
+              <p className="text-sm font-semibold">{t.onboarding.whatAccomplish}</p>
               <div className="grid gap-2">
                 {goals.map((g) => (
                   <button
                     key={g}
                     onClick={() => setGoal(g)}
-                    className={`p-3 rounded-lg border text-left text-sm transition-all ${goal === g ? 'bg-emerald-950/40 border-emerald-500 text-emerald-300' : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-700'}`}
+                    className={cn(
+                      'p-3 rounded-lg border text-left text-sm transition-all',
+                      goal === g
+                        ? 'bg-primary/5 border-primary text-primary'
+                        : 'bg-secondary border-border text-foreground hover:border-primary/30',
+                    )}
                   >
                     {g}
                   </button>
                 ))}
               </div>
               <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setStep(1)} className="border-zinc-800">
+                <Button variant="outline" onClick={() => setStep(1)}>
                   {t.common.back}
                 </Button>
                 <Button
                   onClick={handleComplete}
                   disabled={!goal || saving}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 font-semibold gap-2"
+                  className="flex-1 font-semibold gap-2"
                 >
                   <span>{saving ? t.onboarding.saving : t.onboarding.startPlanning}</span>
                   <ArrowRight className="w-4 h-4" />
