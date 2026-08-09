@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-09T03:19:39.281Z",
+  "generatedAt": "2026-08-09T03:40:51.975Z",
   "collections": [
     {
       "name": "users",
@@ -368,92 +368,6 @@
       "indexes": ["CREATE INDEX idx_shipments_owner_status ON shipments (owner, status)"]
     },
     {
-      "name": "routes",
-      "type": "base",
-      "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
-      },
-      "fields": [
-        {
-          "name": "shipment",
-          "type": "relation",
-          "required": false,
-          "system": false,
-          "collectionRef": "shipments"
-        },
-        {
-          "name": "mode",
-          "type": "select",
-          "required": true,
-          "system": false,
-          "selectValues": ["recommended", "cheapest", "fastest", "safest"]
-        },
-        {
-          "name": "distance_miles",
-          "type": "number",
-          "required": true,
-          "system": false
-        },
-        {
-          "name": "estimated_cost_usd",
-          "type": "number",
-          "required": true,
-          "system": false
-        },
-        {
-          "name": "estimated_time_minutes",
-          "type": "number",
-          "required": true,
-          "system": false
-        },
-        {
-          "name": "risk_level",
-          "type": "select",
-          "required": true,
-          "system": false,
-          "selectValues": ["low", "moderate", "high", "blocked"]
-        },
-        {
-          "name": "compatibility_status",
-          "type": "json",
-          "required": false,
-          "system": false
-        },
-        {
-          "name": "recommendation_reason",
-          "type": "text",
-          "required": false,
-          "system": false
-        },
-        {
-          "name": "data_source",
-          "type": "select",
-          "required": true,
-          "system": false,
-          "selectValues": ["demo", "estimated", "verified"]
-        },
-        {
-          "name": "created",
-          "type": "autodate",
-          "required": false,
-          "system": false,
-          "autodateTriggers": ["onCreate"]
-        },
-        {
-          "name": "updated",
-          "type": "autodate",
-          "required": false,
-          "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
-        }
-      ],
-      "indexes": ["CREATE INDEX idx_routes_shipment ON routes (shipment)"]
-    },
-    {
       "name": "restrictions",
       "type": "base",
       "apiRules": {
@@ -714,6 +628,92 @@
       "indexes": []
     },
     {
+      "name": "routes",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != ''",
+        "view": "@request.auth.id != ''",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "shipment",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "shipments"
+        },
+        {
+          "name": "mode",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["recommended", "cheapest", "fastest", "safest"]
+        },
+        {
+          "name": "distance_miles",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "estimated_cost_usd",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "estimated_time_minutes",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "risk_level",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["low", "moderate", "high", "blocked"]
+        },
+        {
+          "name": "compatibility_status",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "recommendation_reason",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "data_source",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["demo", "estimated", "verified"]
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": ["CREATE INDEX idx_routes_shipment ON routes (shipment)"]
+    },
+    {
       "name": "alerts",
       "type": "base",
       "apiRules": {
@@ -784,7 +784,7 @@
           "autodateTriggers": ["onCreate", "onUpdate"]
         }
       ],
-      "indexes": []
+      "indexes": ["CREATE INDEX idx_alerts_owner ON alerts (owner)"]
     }
   ]
 }

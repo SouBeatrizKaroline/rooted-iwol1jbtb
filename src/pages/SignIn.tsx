@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Wheat } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
@@ -16,11 +16,13 @@ import {
 import { toast } from 'sonner'
 
 export default function SignIn() {
-  const [email, setEmail] = useState('1aspiraqualquer@gmail.com')
-  const [password, setPassword] = useState('Skip@Pass')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
+  const redirect = (location.state as any)?.redirect || '/dashboard'
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,7 +34,7 @@ export default function SignIn() {
       toast.error('Invalid login credentials')
     } else {
       toast.success('Welcome back to Rooted!')
-      navigate('/dashboard')
+      navigate(redirect)
     }
   }
 
@@ -57,6 +59,7 @@ export default function SignIn() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
                 className="bg-zinc-950 border-zinc-800 text-zinc-100"
                 required
               />
@@ -73,6 +76,7 @@ export default function SignIn() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
                 className="bg-zinc-950 border-zinc-800 text-zinc-100"
                 required
               />

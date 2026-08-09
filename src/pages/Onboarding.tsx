@@ -3,10 +3,50 @@ import { useNavigate } from 'react-router-dom'
 import { Wheat, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { useAuth } from '@/hooks/use-auth'
+import pb from '@/lib/pocketbase/client'
+import { toast } from 'sonner'
+
+const roles = [
+  { id: 'producer', label: 'Producer / Farm Owner' },
+  { id: 'carrier', label: 'Agricultural Carrier' },
+  { id: 'cooperative', label: 'Grain Cooperative' },
+  { id: 'buyer', label: 'Agricultural Buyer' },
+  { id: 'logistics_manager', label: 'Logistics Manager' },
+  { id: 'storage_operator', label: 'Storage / Elevator Operator' },
+  { id: 'other', label: 'Other' },
+]
+
+const goals = [
+  'Move a load',
+  'Find a route',
+  'Reduce transportation costs',
+  'Find storage',
+  'Find backhaul',
+  'Monitor shipments',
+  'Analyze logistics',
+]
 
 export default function Onboarding() {
   const [step, setStep] = useState(1)
+  const [role, setRole] = useState('')
+  const [goal, setGoal] = useState('')
+  const [saving, setSaving] = useState(false)
+  const { user } = useAuth()
   const navigate = useNavigate()
+
+  const handleComplete = async () => {
+    setSaving(true)
+    try {
+      await pb.collection('users').update(user.id, { role, onboarded: true })
+      toast.success('Profile set up!')
+      navigate('/planner')
+    } catch {
+      toast.error('Failed to save profile')
+    } finally {
+      setSaving(false)
+    }
+  }
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center py-8">
@@ -21,41 +61,54 @@ export default function Onboarding() {
 
         <CardContent className="space-y-6">
           {step === 1 ? (
-            <div className="space-y-3">
-              <p className="text-sm text-zinc-300">What is your primary freight objective?</p>
+            <div className="space-y-4">
+              <p className="text-sm font-semibold text-zinc-200">Who are you?</p>
               <div className="grid gap-2">
-                {[
-                  'Move agricultural loads',
-                  'Avoid bridge weight violations',
-                  'Reduce empty deadhead miles',
-                  'Find elevator storage',
-                ].map((o, idx) => (
+                {roles.map((r) => (
                   <button
-                    key={idx}
-                    onClick={() => setStep(2)}
-                    className="p-3 bg-zinc-950 border border-zinc-800 hover:border-emerald-500 rounded-lg text-left text-sm text-zinc-200 transition-all"
+                    key={r.id}
+                    onClick={() => setRole(r.id)}
+                    className={`p-3 rounded-lg border text-left text-sm transition-all ${role === r.id ? 'bg-emerald-950/40 border-emerald-500 text-emerald-300' : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-700'}`}
                   >
-                    {o}
+                    {r.label}
                   </button>
                 ))}
               </div>
+              <Button
+                onClick={() => setStep(2)}
+                disabled={!role}
+                className="w-full bg-emerald-600 hover:bg-emerald-500"
+              >
+                Continue
+              </Button>
             </div>
           ) : (
             <div className="space-y-4">
-              <p className="text-sm text-zinc-300">Default Truck Profile Configured</p>
-              <div className="p-3 bg-zinc-950 border border-zinc-800 rounded-lg text-xs space-y-1 text-zinc-400">
-                <p className="font-semibold text-zinc-200">5-Axle Standard Grain Hopper (3S2)</p>
-                <p>Gross Weight Limit: 80,000 lbs</p>
-                <p>Height: 13.5 ft | Length: 65 ft</p>
+              <p className="text-sm font-semibold text-zinc-200">What do you want to accomplish?</p>
+              <div className="grid gap-2">
+                {goals.map((g) => (
+                  <button
+                    key={g}
+                    onClick={() => setGoal(g)}
+                    className={`p-3 rounded-lg border text-left text-sm transition-all ${goal === g ? 'bg-emerald-950/40 border-emerald-500 text-emerald-300' : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-700'}`}
+                  >
+                    {g}
+                  </button>
+                ))}
               </div>
-
-              <Button
-                onClick={() => navigate('/planner')}
-                className="w-full bg-emerald-600 hover:bg-emerald-500 font-semibold gap-2"
-              >
-                <span>Start First Route Calculation</span>
-                <ArrowRight className="w-4 h-4" />
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setStep(1)} className="border-zinc-800">
+                  Back
+                </Button>
+                <Button
+                  onClick={handleComplete}
+                  disabled={!goal || saving}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 font-semibold gap-2"
+                >
+                  <span>{saving ? 'Saving...' : 'Start Planning'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           )}
         </CardContent>

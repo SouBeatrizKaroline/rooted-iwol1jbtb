@@ -12,16 +12,16 @@ routerAdd(
     const routes = [
       {
         mode: 'recommended',
-        name: 'Route B (US-69 via County Rd Highway)',
+        name: 'Route B (US-69 Bypass Corridor)',
         distance_miles: baseDistance + 4.2,
         estimated_cost_usd: Math.round((baseDistance + 4.2) * 4.2 + 25),
-        estimated_time_minutes: 52,
+        estimated_time_minutes: 72,
         risk_level: 'low',
         compatibility_status: [
           {
             label: 'Weight Compatible',
             pass: true,
-            detail: `Gross weight ${grossWeight.toLocaleString()} lbs within 80,000 lbs limit`,
+            detail: 'Gross weight ' + grossWeight.toLocaleString() + ' lbs within 80,000 lbs limit',
           },
           {
             label: 'Bridge Rating Pass',
@@ -29,9 +29,9 @@ routerAdd(
             detail: 'Crosses Skunk River via reinforced US-69 bridge',
           },
           {
-            label: 'Axle Spacing Legal',
+            label: 'Delivery Window Satisfied',
             pass: true,
-            detail: 'Standard 3S2 5-axle bridge formula compliant',
+            detail: 'Estimated arrival within deadline',
           },
         ],
         recommendation_reason:
@@ -43,23 +43,21 @@ routerAdd(
         name: 'Route A (Direct via IA-210 local bridge)',
         distance_miles: baseDistance,
         estimated_cost_usd: Math.round(baseDistance * 4.1 + 10),
-        estimated_time_minutes: 48,
+        estimated_time_minutes: 89,
         risk_level: isHeavy ? 'high' : 'moderate',
         compatibility_status: [
           {
             label: 'Weight Compatible',
             pass: !isHeavy,
-            detail: `Bridge posted at 68,000 lbs gross max. Your vehicle is ${grossWeight.toLocaleString()} lbs.`,
+            detail:
+              'Bridge posted at 68,000 lbs gross max. Your vehicle is ' +
+              grossWeight.toLocaleString() +
+              ' lbs.',
           },
           {
             label: 'Bridge Rating Warning',
             pass: false,
             detail: 'Exceeds IA-210 bridge posted limit',
-          },
-          {
-            label: 'Local Permit Required',
-            pass: false,
-            detail: 'County road permit needed for spring thaw',
           },
         ],
         recommendation_reason:
@@ -71,7 +69,7 @@ routerAdd(
         name: 'Route C (I-35 North Express Bypass)',
         distance_miles: baseDistance + 11.0,
         estimated_cost_usd: Math.round((baseDistance + 11.0) * 4.5 + 40),
-        estimated_time_minutes: 42,
+        estimated_time_minutes: 58,
         risk_level: 'moderate',
         compatibility_status: [
           {
@@ -89,13 +87,42 @@ routerAdd(
           'Fastest travel time due to highway speeds, but 11 miles longer with higher fuel usage and elevated wind risk during seasonal fronts.',
         data_source: 'demo',
       },
+      {
+        mode: 'safest',
+        name: 'Route D (Lowest-Risk Rural Corridor)',
+        distance_miles: baseDistance + 7.5,
+        estimated_cost_usd: Math.round((baseDistance + 7.5) * 4.3 + 30),
+        estimated_time_minutes: 68,
+        risk_level: 'low',
+        compatibility_status: [
+          {
+            label: 'Weight Compatible',
+            pass: true,
+            detail: 'All bridges rated for 40+ tons on this corridor',
+          },
+          {
+            label: 'No Active Restrictions',
+            pass: true,
+            detail: 'No construction or seasonal limits on this route',
+          },
+          {
+            label: 'Weather Clear',
+            pass: true,
+            detail: 'No active weather advisories on this corridor',
+          },
+        ],
+        recommendation_reason:
+          'Lowest overall risk with no active restrictions, no weight-limited bridges, and clear weather. Slightly longer than Route B but offers maximum infrastructure compatibility and reliability.',
+        data_source: 'demo',
+      },
     ]
 
     return e.json(200, {
-      routes,
+      routes: routes,
       load_context: {
         load_weight_lb: weight,
         gross_weight_lb: grossWeight,
+        estimated_value_usd: Number(body.estimated_value_usd || 0),
         origin: body.origin_name || 'Ames, IA',
         destination: body.destination_name || 'Des Moines, IA',
       },

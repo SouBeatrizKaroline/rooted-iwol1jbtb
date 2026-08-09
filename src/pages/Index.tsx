@@ -34,25 +34,33 @@ export default function Index() {
             truck, bridge restrictions, and seasonal rural road conditions.
           </p>
 
-          <div className="flex flex-wrap gap-3 pt-2">
-            <Link to="/planner">
-              <Button
-                size="lg"
-                className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-2 shadow-lg shadow-emerald-600/20"
-              >
-                <span>Plan a Route</span>
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </Link>
-            <Link to="/dashboard">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"
-              >
-                Explore Platform
-              </Button>
-            </Link>
+          <div className="flex flex-col gap-4 pt-2 sm:flex-row">
+            <div className="space-y-1">
+              <Link to="/signup">
+                <Button
+                  size="lg"
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold gap-2 shadow-lg shadow-emerald-600/20"
+                >
+                  <span>Start Planning</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <p className="text-xs text-zinc-500">Create an account to use Rooted</p>
+            </div>
+            <div className="space-y-1">
+              <Link to="/demo">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-zinc-700 text-zinc-200 hover:bg-zinc-900"
+                >
+                  Explore Demo
+                </Button>
+              </Link>
+              <p className="text-xs text-zinc-500">
+                See how Rooted works with sample agricultural freight data
+              </p>
+            </div>
           </div>
         </div>
       </section>

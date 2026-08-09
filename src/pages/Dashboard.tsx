@@ -9,6 +9,7 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { DashboardCharts } from '@/components/DashboardCharts'
 import { Button } from '@/components/ui/button'
 import { RiskBadge } from '@/components/RiskBadge'
 import { getShipments, Shipment } from '@/services/shipments'
@@ -20,13 +21,9 @@ export default function Dashboard() {
   const [alerts, setAlerts] = useState<AlertItem[]>([])
 
   const loadData = async () => {
-    try {
-      const [sData, aData] = await Promise.all([getShipments(), getAlerts()])
-      setShipments(sData)
-      setAlerts(aData)
-    } catch (err) {
-      console.error(err)
-    }
+    const [sResult, aResult] = await Promise.allSettled([getShipments(), getAlerts()])
+    if (sResult.status === 'fulfilled') setShipments(sResult.value)
+    if (aResult.status === 'fulfilled') setAlerts(aResult.value)
   }
 
   useEffect(() => {
@@ -106,6 +103,8 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      <DashboardCharts />
 
       {/* Active Shipments Table / Cards */}
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 space-y-4">

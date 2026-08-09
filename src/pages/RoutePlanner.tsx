@@ -12,6 +12,7 @@ export default function RoutePlanner() {
   const [step, setStep] = useState(1)
   const [commodity, setCommodity] = useState('Corn')
   const [weight, setWeight] = useState(48000)
+  const [estimatedValue, setEstimatedValue] = useState(22500)
   const [origin, setOrigin] = useState('Ames, IA Farm 4')
   const [destination, setDestination] = useState('Des Moines Grain Terminal')
   const [loading, setLoading] = useState(false)
@@ -22,6 +23,8 @@ export default function RoutePlanner() {
     { name: 'Corn', icon: '🌽' },
     { name: 'Soybeans', icon: '🌱' },
     { name: 'Wheat', icon: '🌾' },
+    { name: 'Rice', icon: '🍚' },
+    { name: 'Cotton', icon: '🤍' },
     { name: 'Potatoes', icon: '🥔' },
     { name: 'Produce', icon: '🍅' },
     { name: 'Other', icon: '📦' },
@@ -33,6 +36,7 @@ export default function RoutePlanner() {
       const result = await optimizeRoute({
         commodity,
         load_weight_lb: weight,
+        estimated_value_usd: estimatedValue,
         origin_name: origin,
         destination_name: destination,
       })
@@ -101,6 +105,15 @@ export default function RoutePlanner() {
                 onChange={(e) => setWeight(Number(e.target.value))}
                 className="bg-zinc-950 border-zinc-800 text-zinc-100 text-lg h-12"
               />
+              <div className="space-y-2 pt-2">
+                <Label className="text-xs text-zinc-400">Estimated Value (USD)</Label>
+                <Input
+                  type="number"
+                  value={estimatedValue}
+                  onChange={(e) => setEstimatedValue(Number(e.target.value))}
+                  className="bg-zinc-950 border-zinc-800 text-zinc-100"
+                />
+              </div>
               <div className="flex gap-2 pt-1">
                 {[40000, 48000, 52000].map((w) => (
                   <Button
