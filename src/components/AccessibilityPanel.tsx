@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils'
 import { useI18n } from '@/hooks/use-i18n'
 
 export function AccessibilityPanel() {
-  const { t } = useI18n()
+  const { t, language } = useI18n()
   const [open, setOpen] = useState(false)
   const [settings, setSettings] = useState({
     highContrast: false,
@@ -29,6 +29,7 @@ export function AccessibilityPanel() {
     captions: false,
     enableVoice: false,
     vlibras: false,
+    signLanguage: false,
   })
 
   useEffect(() => {
@@ -150,9 +151,20 @@ export function AccessibilityPanel() {
               </div>
             </div>
 
+            {language === 'pt-BR' && (
+              <div className="flex items-center justify-between pt-2 border-t border-zinc-800">
+                <Label className="text-xs text-zinc-300">{t.accessibility.vlibras}</Label>
+                <Switch checked={settings.vlibras} onCheckedChange={() => toggle('vlibras')} />
+              </div>
+            )}
             <div className="flex items-center justify-between pt-2 border-t border-zinc-800">
-              <Label className="text-xs text-zinc-300">{t.accessibility.vlibras}</Label>
-              <Switch checked={settings.vlibras} onCheckedChange={() => toggle('vlibras')} />
+              <Label className="text-xs text-zinc-300">
+                {t.accessibility?.signLanguage ?? 'Sign Language Support'}
+              </Label>
+              <Switch
+                checked={settings.signLanguage}
+                onCheckedChange={() => toggle('signLanguage')}
+              />
             </div>
           </div>
         </div>

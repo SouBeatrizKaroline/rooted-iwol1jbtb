@@ -4,10 +4,16 @@ import { MobileNav } from '@/components/MobileNav'
 import { OfflineBanner } from '@/components/OfflineBanner'
 import { ComplianceDisclaimer } from '@/components/ComplianceDisclaimer'
 import { AccessibilityPanel } from '@/components/AccessibilityPanel'
+import { useI18n } from '@/hooks/use-i18n'
 
 export default function Layout() {
+  const { t, isRTL } = useI18n()
+
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
+    <div
+      className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans"
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
       <OfflineBanner />
       <Header />
 
@@ -19,12 +25,12 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center md:text-left">
             <p className="font-semibold text-zinc-400">
-              Rooted — {'Inteligência Logística Agrícola'}
+              {t.appName} — {t.tagline}
             </p>
             <ComplianceDisclaimer />
           </div>
           <div className="flex items-center gap-4 text-zinc-400 text-[11px]">
-            <span>Demo Data Mode</span>
+            <span>{t.demoBadge}</span>
           </div>
         </div>
       </footer>

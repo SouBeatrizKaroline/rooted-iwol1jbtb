@@ -287,4 +287,25 @@
   .animate-spotlight {
     animation: spotlight 2s ease forwards;
   }
+
+  [dir='rtl'] .rtl-flip {
+    transform: scaleX(-1);
+  }
+
+  [dir='rtl'] .rtl-mirror {
+    flex-direction: row-reverse;
+  }
+
+  [lang='zh-CN'],
+  [lang='ja'],
+  [lang='ko'] {
+    word-break: break-word;
+    line-height: 1.7;
+  }
+
+  [lang='de'] .btn-expand,
+  [lang='fr'] .btn-expand {
+    white-space: normal;
+    min-height: 2.5rem;
+  }
 }

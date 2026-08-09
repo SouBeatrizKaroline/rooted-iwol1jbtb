@@ -42,12 +42,10 @@ export function Header() {
                 variant="outline"
                 className="text-[10px] px-1.5 py-0 border-emerald-800 bg-emerald-950/40 text-emerald-400"
               >
-                Demo
+                {t.demoBadge}
               </Badge>
             </div>
-            <span className="text-[10px] text-zinc-400 -mt-1 hidden sm:inline">
-              Agricultural Freight Intelligence
-            </span>
+            <span className="text-[10px] text-zinc-400 -mt-1 hidden sm:inline">{t.tagline}</span>
           </div>
         </Link>
 
