@@ -21,7 +21,7 @@ export const useI18n = () => {
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
-    return (localStorage.getItem('rooted_lang') as Language) || 'en'
+    return (localStorage.getItem('rooted_lang') as Language) || 'pt-BR'
   })
   const [units, setUnitsState] = useState<Units>(() => {
     return (localStorage.getItem('rooted_units') as Units) || 'us'

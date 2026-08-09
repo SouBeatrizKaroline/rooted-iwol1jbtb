@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import pb from '@/lib/pocketbase/client'
+import { useI18n } from '@/hooks/use-i18n'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 
 export default function VerifyEmail() {
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
-  const [status, setStatus] = useState('Verifying email address...')
+  const { t } = useI18n()
+  const [status, setStatus] = useState(t.auth.verifying)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -14,18 +16,18 @@ export default function VerifyEmail() {
       pb.collection('users')
         .confirmVerification(token)
         .then(() => {
-          setStatus('Email verified successfully! Redirecting...')
+          setStatus(t.auth.verifiedSuccess)
           setTimeout(() => navigate('/dashboard'), 2000)
         })
-        .catch(() => setStatus('Email verification link is invalid or expired.'))
+        .catch(() => setStatus(t.auth.verifiedFailed))
     }
-  }, [token, navigate])
+  }, [token, navigate, t.auth.verifiedSuccess, t.auth.verifiedFailed])
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
       <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-zinc-100 text-center">
         <CardHeader>
-          <CardTitle className="text-xl">Email Verification</CardTitle>
+          <CardTitle className="text-xl">{t.auth.verifyEmailTitle}</CardTitle>
           <CardDescription className="text-zinc-300 text-sm mt-2">{status}</CardDescription>
         </CardHeader>
       </Card>

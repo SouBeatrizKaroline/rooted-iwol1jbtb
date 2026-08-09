@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-09T03:40:51.975Z",
+  "generatedAt": "2026-08-09T11:51:08.862Z",
   "collections": [
     {
       "name": "users",
@@ -785,6 +785,210 @@
         }
       ],
       "indexes": ["CREATE INDEX idx_alerts_owner ON alerts (owner)"]
+    },
+    {
+      "name": "carriers",
+      "type": "base",
+      "apiRules": {
+        "list": "",
+        "view": "",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != '' && owner = @request.auth.id",
+        "delete": "@request.auth.id != '' && owner = @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "owner",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "vehicle_type",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "trailer_type",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "capacity_lb",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "service_regions",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "cargo_types",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "availability",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["available", "busy", "offline"]
+        },
+        {
+          "name": "preferred_routes",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "estimated_cost_per_mile",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "home_base_name",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "home_base_lat",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "home_base_lng",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX idx_carriers_owner ON carriers (owner)",
+        "CREATE INDEX idx_carriers_availability ON carriers (availability)"
+      ]
+    },
+    {
+      "name": "inventory",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != ''",
+        "view": "@request.auth.id != ''",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "commodity_name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "facility_name",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "current_quantity_bu",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "incoming_quantity_bu",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "outgoing_quantity_bu",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "capacity_bu",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "available_capacity_bu",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "projected_overflow_days",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "region",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "embedding",
+          "type": "vector",
+          "required": false,
+          "system": false,
+          "vectorDimensions": 1536,
+          "vectorDistance": "cosine"
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX idx_inventory_commodity ON inventory (commodity_name)",
+        "CREATE INDEX idx_inventory_region ON inventory (region)"
+      ]
     }
   ]
 }

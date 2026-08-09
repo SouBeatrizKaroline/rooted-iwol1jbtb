@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { Wheat } from 'lucide-react'
 import { useAuth } from '@/hooks/use-auth'
+import { useI18n } from '@/hooks/use-i18n'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -20,6 +21,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const { signIn } = useAuth()
+  const { t } = useI18n()
   const navigate = useNavigate()
   const location = useLocation()
   const redirect = (location.state as any)?.redirect || '/dashboard'
@@ -31,9 +33,9 @@ export default function SignIn() {
     setLoading(false)
 
     if (error) {
-      toast.error('Invalid login credentials')
+      toast.error(t.auth.invalidCredentials)
     } else {
-      toast.success('Welcome back to Rooted!')
+      toast.success(t.notifications.welcomeBack)
       navigate(redirect)
     }
   }
@@ -45,21 +47,21 @@ export default function SignIn() {
           <div className="mx-auto w-10 h-10 bg-emerald-600 rounded-xl flex items-center justify-center text-zinc-950 mb-2">
             <Wheat className="w-6 h-6 stroke-[2.5]" />
           </div>
-          <CardTitle className="text-2xl font-bold">Sign in to Rooted</CardTitle>
+          <CardTitle className="text-2xl font-bold">{t.auth.signInTitle}</CardTitle>
           <CardDescription className="text-zinc-400 text-xs">
-            Agricultural Freight Intelligence Platform
+            {t.auth.signInSubtitle}
           </CardDescription>
         </CardHeader>
 
         <CardContent>
           <form onSubmit={handleSignIn} className="space-y-4">
             <div className="space-y-1">
-              <Label className="text-xs text-zinc-300">Email Address</Label>
+              <Label className="text-xs text-zinc-300">{t.auth.email}</Label>
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
+                placeholder="voce@exemplo.com"
                 className="bg-zinc-950 border-zinc-800 text-zinc-100"
                 required
               />
@@ -67,16 +69,15 @@ export default function SignIn() {
 
             <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <Label className="text-xs text-zinc-300">Password</Label>
+                <Label className="text-xs text-zinc-300">{t.auth.password}</Label>
                 <Link to="/forgot-password" className="text-xs text-emerald-400 hover:underline">
-                  Forgot password?
+                  {t.auth.forgotPassword}
                 </Link>
               </div>
               <Input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
                 className="bg-zinc-950 border-zinc-800 text-zinc-100"
                 required
               />
@@ -87,15 +88,15 @@ export default function SignIn() {
               disabled={loading}
               className="w-full bg-emerald-600 hover:bg-emerald-500 font-semibold"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? t.auth.signingIn : t.auth.signIn}
             </Button>
           </form>
         </CardContent>
 
         <CardFooter className="flex justify-center border-t border-zinc-800 pt-4 text-xs text-zinc-400">
-          <span>Don't have an account? </span>
+          <span>{t.auth.noAccount} </span>
           <Link to="/signup" className="text-emerald-400 font-semibold ml-1 hover:underline">
-            Sign Up
+            {t.auth.createAccount}
           </Link>
         </CardFooter>
       </Card>

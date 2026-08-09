@@ -10,7 +10,7 @@ routerAdd(
     if (!message || !message.trim()) return e.badRequestError('Message is required')
 
     try {
-      const agent = $ai.agent('rooted-copilot')
+      const agent = $ai.agent('root')
       const conv = agent.getOrCreateConversation({
         user_id: userId,
         id: body.conversation_id || null,
@@ -46,7 +46,15 @@ routerAdd(
       if (err instanceof SkipAiConfigError) {
         return e.json(503, { error: 'AI service temporarily unavailable' })
       }
-      return e.json(500, { error: err.message || 'Failed to process Copilot request' })
+      if (err instanceof SkipAiAgentsError) {
+        const status = err.status || 500
+        return e.json(status, { error: status >= 500 ? 'agent request failed' : err.message })
+      }
+      if (err instanceof SkipAiError) {
+        const status = err.status || 502
+        return e.json(status, { error: status >= 500 ? 'AI temporarily unavailable' : err.message })
+      }
+      return e.json(500, { error: err.message || 'Failed to process Root request' })
     }
   },
   $apis.requireAuth(),

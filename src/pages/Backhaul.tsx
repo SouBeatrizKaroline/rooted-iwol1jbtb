@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-import { ArrowLeftRight, CheckCircle2 } from 'lucide-react'
+import { ArrowLeftRight } from 'lucide-react'
 import { getBackhaulLoads, BackhaulLoad } from '@/services/backhaul'
+import { useI18n } from '@/hooks/use-i18n'
 
 export default function Backhaul() {
+  const { t } = useI18n()
   const [loads, setLoads] = useState<BackhaulLoad[]>([])
 
   useEffect(() => {
@@ -12,23 +14,16 @@ export default function Backhaul() {
   return (
     <div className="space-y-6 py-2">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold text-white">Backhaul Freight Opportunities</h1>
-        <p className="text-xs text-zinc-400">
-          Eliminate empty deadhead miles by loading fertilizer or seed on return routes
-        </p>
+        <h1 className="text-2xl font-bold text-white">{t.backhaul.title}</h1>
+        <p className="text-xs text-zinc-400">{t.backhaul.subtitle}</p>
       </div>
-
       <div className="bg-emerald-950/30 border border-emerald-800/40 rounded-xl p-4 flex items-center gap-3 text-xs text-emerald-200">
         <ArrowLeftRight className="w-6 h-6 text-emerald-400 shrink-0" />
         <div>
-          <p className="font-semibold text-emerald-300">Empty-Mile Reduction Engine</p>
-          <p className="text-emerald-400/80">
-            Matching return routes with bulk dry fertilizer loads saves an estimated $420 per return
-            trip.
-          </p>
+          <p className="font-semibold text-emerald-300">{t.backhaul.emptyMileReduction}</p>
+          <p className="text-emerald-400/80">{t.backhaul.emptyMileDesc}</p>
         </div>
       </div>
-
       <div className="space-y-3">
         {loads.map((l) => (
           <div
@@ -42,10 +37,11 @@ export default function Backhaul() {
               <p className="text-zinc-400">
                 {l.origin_name} → {l.destination_name}
               </p>
+              <p className="text-[10px] text-amber-400">{t.backhaul.potentialOpportunity}</p>
             </div>
             <div className="text-right">
               <p className="text-base font-bold text-emerald-400">${l.rate_usd}</p>
-              <p className="text-[10px] text-zinc-500">Pickup: {l.pickup_window}</p>
+              <p className="text-[10px] text-zinc-500">{l.pickup_window}</p>
             </div>
           </div>
         ))}

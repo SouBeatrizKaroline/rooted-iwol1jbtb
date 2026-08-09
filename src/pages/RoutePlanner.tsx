@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Wheat, Truck, ArrowRight, ShieldCheck } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { optimizeRoute } from '@/services/routes'
 import { VehicleForm } from '@/components/VehicleForm'
+import { useI18n } from '@/hooks/use-i18n'
 import { toast } from 'sonner'
 
 export default function RoutePlanner() {
+  const { t } = useI18n()
   const [step, setStep] = useState(1)
   const [commodity, setCommodity] = useState('Corn')
   const [weight, setWeight] = useState(48000)
@@ -40,10 +42,10 @@ export default function RoutePlanner() {
         origin_name: origin,
         destination_name: destination,
       })
-      toast.success('Load-aware routes calculated')
+      toast.success(t.notifications.routeCalculated)
       navigate('/results', { state: { result } })
     } catch (err: any) {
-      toast.error('Calculation failed: ' + err.message)
+      toast.error(t.routes.calcFailed + ': ' + err.message)
     } finally {
       setLoading(false)
     }
@@ -51,13 +53,13 @@ export default function RoutePlanner() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 py-4">
-      {/* Step Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-white">Plan an Agricultural Route</h1>
-        <p className="text-xs text-zinc-400">Step {step} of 5 — Tell us what you need to move</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-white">{t.routes.planTitle}</h1>
+        <p className="text-xs text-zinc-400">
+          {t.routes.step} {step} {t.routes.of} 5
+        </p>
       </div>
 
-      {/* Progress Bar */}
       <div className="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
         <div
           className="bg-emerald-500 h-full transition-all duration-300"
@@ -68,17 +70,15 @@ export default function RoutePlanner() {
       <div className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-6 space-y-6">
         {step === 1 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-zinc-100">Step 1: WHAT ARE YOU MOVING?</h2>
+            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
+              {t.routes.step1Title}
+            </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {commodities.map((c) => (
                 <button
                   key={c.name}
                   onClick={() => setCommodity(c.name)}
-                  className={`p-4 rounded-xl border flex flex-col items-center gap-2 text-sm font-semibold transition-all ${
-                    commodity === c.name
-                      ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300 shadow-lg shadow-emerald-950'
-                      : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'
-                  }`}
+                  className={`p-4 rounded-xl border flex flex-col items-center gap-2 text-sm font-semibold transition-all ${commodity === c.name ? 'bg-emerald-950/60 border-emerald-500 text-emerald-300' : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'}`}
                 >
                   <span className="text-3xl">{c.icon}</span>
                   <span>{c.name}</span>
@@ -89,16 +89,18 @@ export default function RoutePlanner() {
               onClick={() => setStep(2)}
               className="w-full bg-emerald-600 hover:bg-emerald-500"
             >
-              Continue
+              {t.common.continue}
             </Button>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-zinc-100">Step 2: HOW MUCH CARGO WEIGHT?</h2>
+            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
+              {t.routes.step2Title}
+            </h2>
             <div className="space-y-2">
-              <Label className="text-xs text-zinc-400">Cargo Weight (lbs)</Label>
+              <Label className="text-xs text-zinc-400">{t.routes.cargoWeight}</Label>
               <Input
                 type="number"
                 value={weight}
@@ -106,7 +108,7 @@ export default function RoutePlanner() {
                 className="bg-zinc-950 border-zinc-800 text-zinc-100 text-lg h-12"
               />
               <div className="space-y-2 pt-2">
-                <Label className="text-xs text-zinc-400">Estimated Value (USD)</Label>
+                <Label className="text-xs text-zinc-400">{t.routes.estimatedValue}</Label>
                 <Input
                   type="number"
                   value={estimatedValue}
@@ -131,13 +133,13 @@ export default function RoutePlanner() {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setStep(1)} className="border-zinc-800">
-                Back
+                {t.common.back}
               </Button>
               <Button
                 onClick={() => setStep(3)}
                 className="flex-1 bg-emerald-600 hover:bg-emerald-500"
               >
-                Continue
+                {t.common.continue}
               </Button>
             </div>
           </div>
@@ -145,10 +147,12 @@ export default function RoutePlanner() {
 
         {step === 3 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-zinc-100">Step 3: ORIGIN & DESTINATION</h2>
+            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
+              {t.routes.step3Title}
+            </h2>
             <div className="space-y-3">
               <div>
-                <Label className="text-xs text-zinc-400">Pickup Location (Origin)</Label>
+                <Label className="text-xs text-zinc-400">{t.routes.pickupLocation}</Label>
                 <Input
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
@@ -156,7 +160,7 @@ export default function RoutePlanner() {
                 />
               </div>
               <div>
-                <Label className="text-xs text-zinc-400">Delivery Destination</Label>
+                <Label className="text-xs text-zinc-400">{t.routes.deliveryDestination}</Label>
                 <Input
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
@@ -166,13 +170,13 @@ export default function RoutePlanner() {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setStep(2)} className="border-zinc-800">
-                Back
+                {t.common.back}
               </Button>
               <Button
                 onClick={() => setStep(4)}
                 className="flex-1 bg-emerald-600 hover:bg-emerald-500"
               >
-                Continue
+                {t.common.continue}
               </Button>
             </div>
           </div>
@@ -180,10 +184,12 @@ export default function RoutePlanner() {
 
         {step === 4 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-zinc-100">Step 4: SCHEDULE & TIMING</h2>
+            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
+              {t.routes.step4Title}
+            </h2>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label className="text-xs text-zinc-400">Pickup Window</Label>
+                <Label className="text-xs text-zinc-400">{t.routes.pickupWindow}</Label>
                 <Input
                   type="date"
                   defaultValue="2026-08-10"
@@ -191,7 +197,7 @@ export default function RoutePlanner() {
                 />
               </div>
               <div>
-                <Label className="text-xs text-zinc-400">Delivery Deadline</Label>
+                <Label className="text-xs text-zinc-400">{t.routes.deliveryDeadline}</Label>
                 <Input
                   type="date"
                   defaultValue="2026-08-11"
@@ -201,13 +207,13 @@ export default function RoutePlanner() {
             </div>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setStep(3)} className="border-zinc-800">
-                Back
+                {t.common.back}
               </Button>
               <Button
                 onClick={() => setStep(5)}
                 className="flex-1 bg-emerald-600 hover:bg-emerald-500"
               >
-                Continue
+                {t.common.continue}
               </Button>
             </div>
           </div>
@@ -215,43 +221,43 @@ export default function RoutePlanner() {
 
         {step === 5 && (
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-zinc-100">Step 5: VEHICLE SELECTION</h2>
+            <h2 className="text-base md:text-lg font-semibold text-zinc-100">
+              {t.routes.step5Title}
+            </h2>
             <div className="p-4 bg-zinc-950 border border-emerald-800/40 rounded-xl space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-zinc-200">
                   5-Axle Standard Grain Hopper (3S2)
                 </span>
-                <span className="text-xs text-emerald-400 font-medium">Default</span>
+                <span className="text-xs text-emerald-400 font-medium">{t.vehicles.default}</span>
               </div>
               <p className="text-xs text-zinc-400">
-                Gross Weight Rating: 80,000 lbs | Height: 13.5 ft
+                {t.vehicles.grossWeightRating}: 80,000 lbs | {t.vehicles.height}: 13.5 ft
               </p>
               <Button
                 variant="link"
                 onClick={() => setVehicleModal(true)}
                 className="text-xs text-emerald-400 p-0 h-auto"
               >
-                + Add Custom Truck Profile
+                + {t.vehicles.addVehicle}
               </Button>
             </div>
-
             <div className="flex gap-2 pt-2">
               <Button variant="outline" onClick={() => setStep(4)} className="border-zinc-800">
-                Back
+                {t.common.back}
               </Button>
               <Button
                 onClick={handleFindRoute}
                 disabled={loading}
                 className="flex-1 bg-emerald-600 hover:bg-emerald-500 font-semibold gap-2 text-white h-11"
               >
-                <span>{loading ? 'Evaluating Infrastructure...' : 'Find Best Route'}</span>
+                <span>{loading ? t.routes.evaluating : t.routes.findBestRoute}</span>
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           </div>
         )}
       </div>
-
       <VehicleForm open={vehicleModal} onOpenChange={setVehicleModal} />
     </div>
   )

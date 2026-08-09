@@ -13,9 +13,9 @@ export function LanguageSelector() {
   const { language, setLanguage, units, setUnits } = useI18n()
 
   const labels: Record<Language, string> = {
+    'pt-BR': 'Português (BR)',
     en: 'English (US)',
     es: 'Español',
-    'pt-BR': 'Português (BR)',
   }
 
   return (
@@ -33,6 +33,12 @@ export function LanguageSelector() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 text-zinc-100">
           <DropdownMenuItem
+            onClick={() => setLanguage('pt-BR')}
+            className="hover:bg-zinc-800 cursor-pointer"
+          >
+            Português (BR)
+          </DropdownMenuItem>
+          <DropdownMenuItem
             onClick={() => setLanguage('en')}
             className="hover:bg-zinc-800 cursor-pointer"
           >
@@ -43,12 +49,6 @@ export function LanguageSelector() {
             className="hover:bg-zinc-800 cursor-pointer"
           >
             Español
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setLanguage('pt-BR')}
-            className="hover:bg-zinc-800 cursor-pointer"
-          >
-            Português (BR)
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

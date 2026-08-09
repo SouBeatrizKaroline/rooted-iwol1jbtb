@@ -3,6 +3,7 @@ import { Header } from '@/components/Header'
 import { MobileNav } from '@/components/MobileNav'
 import { OfflineBanner } from '@/components/OfflineBanner'
 import { ComplianceDisclaimer } from '@/components/ComplianceDisclaimer'
+import { AccessibilityPanel } from '@/components/AccessibilityPanel'
 
 export default function Layout() {
   return (
@@ -18,19 +19,18 @@ export default function Layout() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center md:text-left">
             <p className="font-semibold text-zinc-400">
-              Rooted — Agricultural Freight Intelligence
+              Rooted — {'Inteligência Logística Agrícola'}
             </p>
             <ComplianceDisclaimer />
           </div>
           <div className="flex items-center gap-4 text-zinc-400 text-[11px]">
-            <span>Works best with a stable connection</span>
-            <span>•</span>
             <span>Demo Data Mode</span>
           </div>
         </div>
       </footer>
 
       <MobileNav />
+      <AccessibilityPanel />
     </div>
   )
 }
