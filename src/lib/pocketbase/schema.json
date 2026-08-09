@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-09T03:13:48.523Z",
+  "generatedAt": "2026-08-09T03:19:39.281Z",
   "collections": [
     {
       "name": "users",
@@ -37,12 +37,754 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onCreate", "onUpdate"]
+        },
+        {
+          "name": "role",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": [
+            "producer",
+            "carrier",
+            "cooperative",
+            "buyer",
+            "logistics_manager",
+            "storage_operator",
+            "other"
+          ]
+        },
+        {
+          "name": "language",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["en", "es", "pt-BR"]
+        },
+        {
+          "name": "units",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["us", "metric"]
+        },
+        {
+          "name": "onboarded",
+          "type": "bool",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": [
         "CREATE UNIQUE INDEX `idx_tokenKey__pb_users_auth_` ON `users` (`tokenKey`)",
         "CREATE UNIQUE INDEX `idx_email__pb_users_auth_` ON `users` (`email`) WHERE `email` != ''"
       ]
+    },
+    {
+      "name": "vehicles",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != '' && owner = @request.auth.id",
+        "view": "@request.auth.id != '' && owner = @request.auth.id",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != '' && owner = @request.auth.id",
+        "delete": "@request.auth.id != '' && owner = @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "owner",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "vehicle_type",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "trailer_type",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "empty_weight_lb",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "cargo_weight_lb",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "gross_weight_lb",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "axles",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "axle_config",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "height_ft",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "width_ft",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "length_ft",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "is_default",
+          "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": ["CREATE INDEX idx_vehicles_owner ON vehicles (owner)"]
+    },
+    {
+      "name": "commodities",
+      "type": "base",
+      "apiRules": {
+        "list": "",
+        "view": "",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "category",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["grain", "produce", "livestock", "packaged", "other"]
+        },
+        {
+          "name": "icon",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "default_unit",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "shipments",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != '' && owner = @request.auth.id",
+        "view": "@request.auth.id != '' && owner = @request.auth.id",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != '' && owner = @request.auth.id",
+        "delete": "@request.auth.id != '' && owner = @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "owner",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "commodity",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "commodities"
+        },
+        {
+          "name": "commodity_name",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "load_weight_lb",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "estimated_value_usd",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "origin_name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "origin_lat",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "origin_lng",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "destination_name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "destination_lat",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "destination_lng",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "pickup_window_start",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "pickup_window_end",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "delivery_deadline",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "vehicle",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "vehicles"
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["draft", "active", "completed", "cancelled"]
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": ["CREATE INDEX idx_shipments_owner_status ON shipments (owner, status)"]
+    },
+    {
+      "name": "routes",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != ''",
+        "view": "@request.auth.id != ''",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "shipment",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "shipments"
+        },
+        {
+          "name": "mode",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["recommended", "cheapest", "fastest", "safest"]
+        },
+        {
+          "name": "distance_miles",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "estimated_cost_usd",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "estimated_time_minutes",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "risk_level",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["low", "moderate", "high", "blocked"]
+        },
+        {
+          "name": "compatibility_status",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "recommendation_reason",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "data_source",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["demo", "estimated", "verified"]
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": ["CREATE INDEX idx_routes_shipment ON routes (shipment)"]
+    },
+    {
+      "name": "restrictions",
+      "type": "base",
+      "apiRules": {
+        "list": "",
+        "view": "",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "type",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["bridge", "weight", "road", "seasonal", "construction"]
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "severity",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["low", "moderate", "high", "blocked"]
+        },
+        {
+          "name": "max_weight_tons",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "last_verified",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["active", "estimated"]
+        },
+        {
+          "name": "confidence",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["high", "medium", "low"]
+        },
+        {
+          "name": "data_class",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["verified", "estimated", "predicted", "user_provided", "unavailable"]
+        },
+        {
+          "name": "lat",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "lng",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "storage_facilities",
+      "type": "base",
+      "apiRules": {
+        "list": "",
+        "view": "",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "facility_type",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["elevator", "storage", "processor"]
+        },
+        {
+          "name": "distance_miles",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "capacity_pct",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "fee_per_bushel",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "commodity_compatibility",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "transport_risk",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["low", "medium", "high"]
+        },
+        {
+          "name": "lat",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "lng",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "backhaul_loads",
+      "type": "base",
+      "apiRules": {
+        "list": "",
+        "view": "",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != ''",
+        "delete": "@request.auth.id != ''"
+      },
+      "fields": [
+        {
+          "name": "origin_name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "destination_name",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "commodity",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "weight_lb",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "rate_usd",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "pickup_window",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["open", "matched", "closed"]
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "alerts",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != '' && owner = @request.auth.id",
+        "view": "@request.auth.id != '' && owner = @request.auth.id",
+        "create": "@request.auth.id != ''",
+        "update": "@request.auth.id != '' && owner = @request.auth.id",
+        "delete": "@request.auth.id != '' && owner = @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "owner",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "shipment",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "shipments"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "message",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "severity",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["info", "warning", "critical"]
+        },
+        {
+          "name": "read",
+          "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
     }
   ]
 }
