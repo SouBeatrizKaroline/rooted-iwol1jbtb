@@ -309,3 +309,115 @@
     min-height: 2.5rem;
   }
 }
+
+/* Accessibility: High contrast mode */
+.a11y-high-contrast {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 100%;
+  --border: 0 0% 80%;
+  --input: 0 0% 80%;
+  --primary: 142 76% 36%;
+  --primary-foreground: 0 0% 100%;
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 75%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+}
+
+.a11y-high-contrast .bg-zinc-900,
+.a11y-high-contrast .bg-zinc-950 {
+  background-color: hsl(0 0% 0%) !important;
+}
+
+.a11y-high-contrast .text-zinc-100,
+.a11y-high-contrast .text-zinc-200,
+.a11y-high-contrast .text-zinc-300,
+.a11y-high-contrast .text-white {
+  color: hsl(0 0% 100%) !important;
+}
+
+.a11y-high-contrast .text-zinc-400,
+.a11y-high-contrast .text-zinc-500 {
+  color: hsl(0 0% 80%) !important;
+}
+
+.a11y-high-contrast .border-zinc-800,
+.a11y-high-contrast .border-zinc-700 {
+  border-color: hsl(0 0% 50%) !important;
+}
+
+/* Accessibility: Larger text */
+.a11y-large-text {
+  font-size: 1.12rem;
+}
+.a11y-large-text .text-xs {
+  font-size: 0.85rem;
+}
+.a11y-large-text .text-sm {
+  font-size: 1rem;
+}
+.a11y-large-text .text-\[10px\] {
+  font-size: 0.8rem;
+}
+.a11y-large-text .text-\[11px\] {
+  font-size: 0.85rem;
+}
+.a11y-large-text .text-base {
+  font-size: 1.12rem;
+}
+.a11y-large-text .text-lg {
+  font-size: 1.25rem;
+}
+.a11y-large-text .text-xl {
+  font-size: 1.4rem;
+}
+.a11y-large-text .text-2xl {
+  font-size: 1.6rem;
+}
+.a11y-large-text .text-3xl {
+  font-size: 1.8rem;
+}
+
+/* Accessibility: Reduced motion */
+.a11y-reduce-animations *,
+.a11y-reduce-animations *::before,
+.a11y-reduce-animations *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid hsl(142 76% 36%);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Color blind mode filters */
+[data-colorblind='deuteranopia'] {
+  filter: hue-rotate(-20deg) saturate(0.85);
+}
+[data-colorblind='protanopia'] {
+  filter: hue-rotate(-10deg) saturate(0.8);
+}
+[data-colorblind='tritanopia'] {
+  filter: hue-rotate(20deg) saturate(0.85);
+}
+[data-colorblind='high-contrast'] {
+  filter: contrast(1.3) saturate(1.2);
+}

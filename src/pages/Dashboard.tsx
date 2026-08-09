@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { DashboardCharts } from '@/components/DashboardCharts'
 import { Button } from '@/components/ui/button'
 import { RiskBadge } from '@/components/RiskBadge'
+import { LoadingState } from '@/components/StateViews'
 import { getShipments, Shipment } from '@/services/shipments'
 import { getAlerts, AlertItem } from '@/services/alerts'
 import { useRealtime } from '@/hooks/use-realtime'
@@ -14,11 +15,14 @@ export default function Dashboard() {
   const { t } = useI18n()
   const [shipments, setShipments] = useState<Shipment[]>([])
   const [alerts, setAlerts] = useState<AlertItem[]>([])
+  const [loading, setLoading] = useState(true)
 
   const loadData = async () => {
+    setLoading(true)
     const [sResult, aResult] = await Promise.allSettled([getShipments(), getAlerts()])
     if (sResult.status === 'fulfilled') setShipments(sResult.value)
     if (aResult.status === 'fulfilled') setAlerts(aResult.value)
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -38,6 +42,8 @@ export default function Dashboard() {
       : hour < 18
         ? t.dashboard.greetingAfternoon
         : t.dashboard.greetingEvening
+
+  if (loading) return <LoadingState label="Loading dashboard..." />
 
   return (
     <div className="space-y-6 py-2">

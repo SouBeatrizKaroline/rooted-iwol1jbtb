@@ -82,7 +82,7 @@ export function AccessibilityPanel() {
           'fixed bottom-4 right-4 z-40 w-11 h-11 rounded-full',
           'bg-zinc-900 border border-zinc-700 text-emerald-400',
           'flex items-center justify-center shadow-lg hover:bg-zinc-800 transition-colors',
-          'md:bottom-20 md:right-4',
+          'bottom-20 right-4 md:bottom-4 md:right-4',
         )}
         aria-label={t.accessibility.title}
       >
@@ -166,6 +166,28 @@ export function AccessibilityPanel() {
                 onCheckedChange={() => toggle('signLanguage')}
               />
             </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setSettings({
+                  highContrast: false,
+                  colorBlindMode: 'default',
+                  largerText: false,
+                  reduceAnimations: false,
+                  keyboardNav: false,
+                  screenReader: false,
+                  captions: false,
+                  enableVoice: false,
+                  vlibras: false,
+                  signLanguage: false,
+                })
+              }
+              className="w-full border-zinc-700 text-zinc-300 text-xs mt-2"
+            >
+              Reset Accessibility Settings
+            </Button>
           </div>
         </div>
       )}

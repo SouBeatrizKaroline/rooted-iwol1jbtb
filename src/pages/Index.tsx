@@ -19,9 +19,24 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ComplianceDisclaimer } from '@/components/ComplianceDisclaimer'
 import { useI18n } from '@/hooks/use-i18n'
+import { useAuth } from '@/hooks/use-auth'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 export default function Index() {
   const { t } = useI18n()
+  const { demoSignIn } = useAuth()
+  const navigate = useNavigate()
+
+  const handleDemo = async () => {
+    const { error } = await demoSignIn()
+    if (error) {
+      toast.error('Demo mode unavailable. Please try again.')
+    } else {
+      toast.success('Demo mode activated — using simulated data')
+      navigate('/dashboard')
+    }
+  }
 
   return (
     <div className="space-y-16 py-4">
@@ -49,22 +64,21 @@ export default function Index() {
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-            <Link to="/demo">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-zinc-700 text-zinc-200 hover:bg-zinc-900 w-full sm:w-auto"
-              >
-                {t.landing.exploreDemo}
-              </Button>
-            </Link>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={handleDemo}
+              className="border-emerald-700/60 text-emerald-300 hover:bg-emerald-950/40 w-full sm:w-auto"
+            >
+              Try Demo
+            </Button>
             <Link to="/demo">
               <Button
                 size="lg"
                 variant="ghost"
                 className="text-zinc-400 hover:text-white w-full sm:w-auto"
               >
-                {t.landing.howItWorks}
+                {t.landing.exploreDemo}
               </Button>
             </Link>
           </div>

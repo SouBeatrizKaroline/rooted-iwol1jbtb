@@ -20,7 +20,7 @@ export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const { signIn } = useAuth()
+  const { signIn, demoSignIn } = useAuth()
   const { t } = useI18n()
   const navigate = useNavigate()
   const location = useLocation()
@@ -93,11 +93,32 @@ export default function SignIn() {
           </form>
         </CardContent>
 
-        <CardFooter className="flex justify-center border-t border-zinc-800 pt-4 text-xs text-zinc-400">
-          <span>{t.auth.noAccount} </span>
-          <Link to="/signup" className="text-emerald-400 font-semibold ml-1 hover:underline">
-            {t.auth.createAccount}
-          </Link>
+        <CardFooter className="flex flex-col gap-3 border-t border-zinc-800 pt-4 text-xs text-zinc-400">
+          <div className="flex items-center justify-center">
+            <span>{t.auth.noAccount} </span>
+            <Link to="/signup" className="text-emerald-400 font-semibold ml-1 hover:underline">
+              {t.auth.createAccount}
+            </Link>
+          </div>
+          <div className="w-full pt-2 border-t border-zinc-800/50">
+            <p className="text-center text-[10px] text-zinc-500 mb-2">Want to explore first?</p>
+            <Button
+              onClick={async () => {
+                setLoading(true)
+                const { error } = await demoSignIn()
+                setLoading(false)
+                if (error) toast.error('Demo mode unavailable')
+                else {
+                  toast.success('Demo mode activated')
+                  navigate(redirect)
+                }
+              }}
+              variant="outline"
+              className="w-full border-emerald-700/60 text-emerald-300 hover:bg-emerald-950/40 text-xs"
+            >
+              Try Demo Mode
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </div>

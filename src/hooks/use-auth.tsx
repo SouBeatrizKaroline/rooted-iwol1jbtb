@@ -12,6 +12,8 @@ interface AuthContextType {
   confirmPasswordReset: (token: string, password: string) => Promise<{ error: any }>
   requestEmailChange: (newEmail: string) => Promise<{ error: any }>
   confirmEmailChange: (token: string, password: string) => Promise<{ error: any }>
+  isDemoMode: boolean
+  demoSignIn: () => Promise<{ error: any }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -26,6 +28,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<any>(pb.authStore.isValid ? pb.authStore.record : null)
   const [isAuthenticated, setIsAuthenticated] = useState(pb.authStore.isValid)
   const [loading, setLoading] = useState(true)
+  const [isDemoMode, setIsDemoMode] = useState(
+    () => localStorage.getItem('rooted_demo_mode') === 'true',
+  )
 
   useEffect(() => {
     const unsubscribe = pb.authStore.onChange((_token, record) => {
@@ -79,8 +84,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const demoSignIn = async () => {
+    try {
+      const result = await pb.send<{ token: string; record: any }>('/backend/v1/demo-login', {
+        method: 'POST',
+      })
+      pb.authStore.save(result.token, result.record)
+      setIsDemoMode(true)
+      localStorage.setItem('rooted_demo_mode', 'true')
+      return { error: null }
+    } catch (error) {
+      return { error }
+    }
+  }
+
   const signOut = () => {
     pb.authStore.clear()
+    setIsDemoMode(false)
+    localStorage.removeItem('rooted_demo_mode')
   }
 
   const requestPasswordReset = async (email: string) => {
@@ -126,9 +147,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         isAuthenticated,
         loading,
+        isDemoMode,
         signUp,
         signIn,
         signOut,
+        demoSignIn,
         requestPasswordReset,
         confirmPasswordReset,
         requestEmailChange,
