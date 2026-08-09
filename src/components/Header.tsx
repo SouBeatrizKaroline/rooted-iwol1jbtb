@@ -59,35 +59,35 @@ export function Header() {
               className="px-3 py-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-900 flex items-center gap-1.5"
             >
               <BarChart2 className="w-4 h-4 text-emerald-400" />
-              <span>{t.nav.dashboard}</span>
+              <span>{t.navigation?.dashboard ?? 'Overview'}</span>
             </Link>
             <Link
               to="/planner"
               className="px-3 py-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-900 flex items-center gap-1.5"
             >
               <Truck className="w-4 h-4 text-emerald-400" />
-              <span>{t.nav.planRoute}</span>
+              <span>{t.navigation?.planRoute ?? 'Plan a Route'}</span>
             </Link>
             <Link
               to="/storage"
               className="px-3 py-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-900 flex items-center gap-1.5"
             >
               <Warehouse className="w-4 h-4 text-emerald-400" />
-              <span>{t.nav.storage}</span>
+              <span>{t.navigation?.storage ?? 'Storage'}</span>
             </Link>
             <Link
               to="/backhaul"
               className="px-3 py-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-900 flex items-center gap-1.5"
             >
               <ArrowLeftRight className="w-4 h-4 text-emerald-400" />
-              <span>{t.nav.backhaul}</span>
+              <span>{t.navigation?.backhaul ?? 'Backhaul'}</span>
             </Link>
             <Link
               to="/copilot"
               className="px-3 py-1.5 rounded-md text-zinc-300 hover:text-white hover:bg-zinc-900 flex items-center gap-1.5"
             >
               <Bot className="w-4 h-4 text-emerald-400" />
-              <span>{t.nav.copilot}</span>
+              <span>{t.navigation?.root ?? 'Root'}</span>
             </Link>
           </nav>
         )}
@@ -117,7 +117,7 @@ export function Header() {
                   className="hover:bg-zinc-800 cursor-pointer"
                 >
                   <Settings className="w-4 h-4 mr-2 text-zinc-400" />
-                  <span>{t.nav.settings}</span>
+                  <span>{t.navigation?.settings ?? 'Settings'}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
@@ -127,7 +127,7 @@ export function Header() {
                   className="hover:bg-zinc-800 cursor-pointer text-rose-400"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
-                  <span>{t.nav.signOut}</span>
+                  <span>{t.navigation?.signOut ?? 'Sign Out'}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -137,7 +137,7 @@ export function Header() {
                 size="sm"
                 className="bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs"
               >
-                {t.nav.signIn}
+                {t.navigation?.signIn ?? 'Sign In'}
               </Button>
             </Link>
           )}
